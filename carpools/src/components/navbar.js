@@ -15,7 +15,7 @@ export function Navbar()
                 }
             }
             >
-                <Grid container spacing={2} columns={16} sx={{ flexGrow: 1, backgroundColor: "#00A9FF", height: "4.3rem" }}>
+                <Grid container spacing={2} columns={16} sx={{ flexGrow: 1 }}>
                     <Grid xs={8}>
                         <Stack sx={{paddingLeft: "7rem"}}>
                             <NavLink to = "/">
