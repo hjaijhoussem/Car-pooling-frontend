@@ -61,8 +61,8 @@ export function Signup() {
                 <FormLabel>Password</FormLabel>
                 <Input endDecorator={<PasswordIcon />} type='password' placeholder="Enter your password" required />
             </FormControl>
-            <Divider inset="none" sx={{ gridColumn: '1/-1', marginTop: "0.5rem", marginBottom: "-0.5rem" }} />
-            <CardActions sx={{ gridColumn: '1/-1' }}>
+            <Divider inset="none" sx={{ gridColumn: '1/-1', marginTop: "0.3rem" }} />
+            <CardActions sx={{ gridColumn: '1/-1', padding: "0rem" }}>
                 <Button variant="solid" sx={{maxWidth: '7rem', margin: 'auto', backgroundColor: '#00A9FF', "&:hover": {backgroundColor: '#0099FF'}}}>
                     Signup
                 </Button>

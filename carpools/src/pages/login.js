@@ -47,8 +47,8 @@ export function Login() {
             <Input endDecorator={<PasswordIcon />} type='password' placeholder="Enter your password" required />
           </FormControl>
           <Checkbox variant='outlined' label="Remember me" sx={{ gridColumn: '1/-1', my: 1 }} />
-          <Divider inset="none" sx={{ gridColumn: '1/-1', marginTop: "0rem", marginBottom: "-0.5rem" }} />
-          <CardActions sx={{ gridColumn: '1/-1' }}>
+          <Divider inset="none" sx={{ gridColumn: '1/-1', marginTop: "-0.3rem" }} />
+          <CardActions sx={{ gridColumn: '1/-1', padding: "0rem" }}>
             <Button variant="solid" sx={{maxWidth: '7rem', margin: 'auto', backgroundColor: '#00A9FF', "&:hover": {backgroundColor: '#0099FF'}}}>
               Login
             </Button>
