@@ -1,5 +1,5 @@
 import { Autocomplete, Box, Stack } from "@mui/joy";
-import React from "react";
+import React, { useState } from "react";
 import carsbanner from "../images/carsbanner.jpg";
 import driverpassengers from "../images/driver_passengers.svg";
 import Card from '@mui/joy/Card';
@@ -23,10 +23,51 @@ import { NavLink } from "react-router-dom";
 export function Home()
 {
 
+    const [departure, setDeparture] = useState("");
+    const [arrival, setArrival] = useState("");
+    const [date, setDate] = useState("");
+    const [passengersnb, setPassengersnb] = useState(1);
+
+    const [depInvalid, setDepInvalid ] = useState(false);
+    const [arrivalInvalid, setArrivalInvalid ] = useState(false);
+    const [dateInvalid, setDateInvalid ] = useState(false);
+
     // how to get values and handle change of select inputs
     const handleChange = (event, newValue) => {
-        // alert(`You chose "${newValue}"`);
+        setPassengersnb(newValue);
     };
+
+    function handleSubmit()
+    {
+        if (!(departure))
+        {
+            if (!(arrival))
+            {
+                if (!(date))
+                {
+                    setDateInvalid(true);
+                }
+                setArrivalInvalid(true);
+            }
+            setDepInvalid(true);
+            return;
+        }
+        if (!(arrival))
+        {
+            if (!(date))
+            {
+                setDateInvalid(true);
+            }
+            setArrivalInvalid(true);
+            return;
+        }
+        if (!(date))
+        {
+            setDateInvalid(true);
+            return;
+        }
+        alert(`values are: ${departure} ${arrival} ${date} ${passengersnb}`)
+    }
 
     return(
         <>
@@ -50,13 +91,13 @@ export function Home()
                 <CardContent>
                     <Stack direction={"row"} spacing={2} justifyContent={"center"}>
                         <FormControl>
-                            <Autocomplete size="lg" options={data.locations} sx={{maxWidth: "14rem"}} startDecorator={<LocationSearchingIcon />} placeholder="Leaving from" required />
+                            <Autocomplete color={depInvalid ? "danger" : "neutral"} size="lg" options={data.locations} sx={{maxWidth: "14rem"}} startDecorator={<LocationSearchingIcon sx={depInvalid ? { color: "#d86d6e" } : {}} />} placeholder="Leaving from"  onChange={(event, newValue) => setDeparture(newValue)} required />
                         </FormControl>
                         <FormControl>
-                            <Autocomplete size="lg" options={data.locations} sx={{maxWidth: "14rem"}} startDecorator={<LocationSearchingIcon />} placeholder="Going to" required />
+                            <Autocomplete color={arrivalInvalid ? "danger" : "neutral"} size="lg" options={data.locations} sx={{maxWidth: "14rem"}} startDecorator={<LocationSearchingIcon sx={arrivalInvalid ? { color: "#d86d6e" } : {}} />} placeholder="Going to" onChange={(event, newValue) => setArrival(newValue)} required />
                         </FormControl>
                         <FormControl>
-                            <Input size="lg" type='date' />
+                            <Input color={dateInvalid ? "danger" : "neutral"} size="lg" type='date' onChange={(event) => setDate(event.target.value)} required />
                         </FormControl>
                         <Select size="lg" startDecorator={<PersonIcon />} defaultValue="1" onChange={handleChange}>
                             <Option value="1">1 passenger</Option>
@@ -69,9 +110,11 @@ export function Home()
                             <Option value="8">8 passengers</Option>
                         </Select>
                         <CardActions sx={{padding: "0rem"}}>
-                            <Button size="lg" variant="solid" sx={{ width: "7rem", backgroundColor: '#00A9FF', "&:hover": {backgroundColor: '#0099FF'}}}>
-                                Search
-                            </Button>
+                            <NavLink to = {`/search/${departure}/${arrival}/${date}/${passengersnb}`}>
+                                <Button size="lg" variant="solid" sx={{ width: "7rem", backgroundColor: '#00A9FF', "&:hover": {backgroundColor: '#0099FF'}}} onClick={handleSubmit}>
+                                    Search
+                                </Button>
+                            </NavLink>
                         </CardActions>
                     </Stack>
                 </CardContent>
@@ -124,11 +167,9 @@ export function Home()
                     </Typography>
                     <CardActions sx={{padding: "0rem"}}>
                         <Box sx={{margin: "auto"}}>
-                            <NavLink to = "/offerride">
-                                <Button variant="solid" size="lg" sx={{maxWidth: '11rem', margin: 'auto', backgroundColor: '#00A9FF', "&:hover": {backgroundColor: '#0099FF'}}}>
-                                    Offer a ride
-                                </Button>
-                            </NavLink>
+                            <Button variant="solid" size="lg" sx={{maxWidth: '11rem', margin: 'auto', backgroundColor: '#00A9FF', "&:hover": {backgroundColor: '#0099FF'}}}>
+                                Offer a ride
+                            </Button>
                         </Box>
                     </CardActions>
                 </Card>

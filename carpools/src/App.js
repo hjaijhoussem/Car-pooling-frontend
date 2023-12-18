@@ -14,7 +14,10 @@ function App() {
       <Routes>
         <Route path = '/' element = {<Home />} />
         <Route path = '/offerride' element = {<Offerride />} />
-        <Route path = '/search' element = {<Search />} />
+        <Route path = '/search'>
+          <Route index element = {<Search />} />
+          <Route path = ':departure/:arrival/:date/:passengersnb' element = {<Search />} />
+        </Route>
         <Route path = '/login' element = {<Login />} />
         <Route path = '/signup' element = {<Signup />} />
       </Routes>
