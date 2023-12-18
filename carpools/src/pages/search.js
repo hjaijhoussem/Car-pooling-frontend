@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Autocomplete, Box, Stack } from "@mui/joy";
 import Card from '@mui/joy/Card';
 import CardActions from '@mui/joy/CardActions';
@@ -19,10 +19,49 @@ export function Search()
 
     const params = useParams();
 
-    // how to get values and handle change of select inputs
+    const [departure, setDeparture] = useState("");
+    const [arrival, setArrival] = useState("");
+    const [date, setDate] = useState("");
+    const [passengersnb, setPassengersnb] = useState(1);
+
+    const [depInvalid, setDepInvalid ] = useState(false);
+    const [arrivalInvalid, setArrivalInvalid ] = useState(false);
+    const [dateInvalid, setDateInvalid ] = useState(false);
+
     const handleChange = (event, newValue) => {
-        // alert(`You chose "${newValue}"`);
+        setPassengersnb(newValue);
     };
+
+    function handleSubmit()
+    {
+        if (!(departure))
+        {
+            if (!(arrival))
+            {
+                if (!(date))
+                {
+                    setDateInvalid(true);
+                }
+                setArrivalInvalid(true);
+            }
+            setDepInvalid(true);
+            return;
+        }
+        if (!(arrival))
+        {
+            if (!(date))
+            {
+                setDateInvalid(true);
+            }
+            setArrivalInvalid(true);
+            return;
+        }
+        if (!(date))
+        {
+            setDateInvalid(true);
+            return;
+        }
+    }
 
     return(
         <>
@@ -39,15 +78,15 @@ export function Search()
                 <CardContent>
                     <Stack direction={"row"} spacing={2} justifyContent={"center"}>
                         <FormControl>
-                            <Autocomplete size="lg" options={data.locations} sx={{maxWidth: "14rem"}} startDecorator={<LocationSearchingIcon />} placeholder="Leaving from" required />
+                            <Autocomplete color={depInvalid ? "danger" : "neutral"} size="lg" options={data.locations} defaultValue={params.departure} sx={{maxWidth: "14rem"}} startDecorator={<LocationSearchingIcon />} placeholder="Leaving from" onChange={(event, newValue) => setDeparture(newValue)} required />
                         </FormControl>
                         <FormControl>
-                            <Autocomplete size="lg" options={data.locations} sx={{maxWidth: "14rem"}} startDecorator={<LocationSearchingIcon />} placeholder="Going to" required />
+                            <Autocomplete color={arrivalInvalid ? "danger" : "neutral"} size="lg" options={data.locations} defaultValue={params.arrival} sx={{maxWidth: "14rem"}} startDecorator={<LocationSearchingIcon />} placeholder="Going to" onChange={(event, newValue) => setArrival(newValue)} required />
                         </FormControl>
                         <FormControl>
-                            <Input size="lg" type='date' />
+                            <Input color={dateInvalid ? "danger" : "neutral"} size="lg" defaultValue={params.date} type='date' onChange={(event) => setDate(event.target.value)} />
                         </FormControl>
-                        <Select size="lg" startDecorator={<PersonIcon />} defaultValue="1" onChange={handleChange}>
+                        <Select size="lg" startDecorator={<PersonIcon />} defaultValue={params.passengersnb ? params.passengersnb : "1"} onChange={handleChange}>
                             <Option value="1">1 passenger</Option>
                             <Option value="2">2 passengers</Option>
                             <Option value="3">3 passengers</Option>
@@ -58,7 +97,7 @@ export function Search()
                             <Option value="8">8 passengers</Option>
                         </Select>
                         <CardActions sx={{padding: "0rem"}}>
-                            <Button size="lg" variant="solid" sx={{ width: "7rem", backgroundColor: '#00A9FF', "&:hover": {backgroundColor: '#0099FF'}}}>
+                            <Button size="lg" variant="solid" sx={{ width: "7rem", backgroundColor: '#00A9FF', "&:hover": {backgroundColor: '#0099FF'}}} onClick={handleSubmit}>
                                 Search
                             </Button>
                         </CardActions>

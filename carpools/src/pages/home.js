@@ -32,7 +32,6 @@ export function Home()
     const [arrivalInvalid, setArrivalInvalid ] = useState(false);
     const [dateInvalid, setDateInvalid ] = useState(false);
 
-    // how to get values and handle change of select inputs
     const handleChange = (event, newValue) => {
         setPassengersnb(newValue);
     };
@@ -66,7 +65,6 @@ export function Home()
             setDateInvalid(true);
             return;
         }
-        alert(`values are: ${departure} ${arrival} ${date} ${passengersnb}`)
     }
 
     return(
@@ -91,7 +89,7 @@ export function Home()
                 <CardContent>
                     <Stack direction={"row"} spacing={2} justifyContent={"center"}>
                         <FormControl>
-                            <Autocomplete color={depInvalid ? "danger" : "neutral"} size="lg" options={data.locations} sx={{maxWidth: "14rem"}} startDecorator={<LocationSearchingIcon sx={depInvalid ? { color: "#d86d6e" } : {}} />} placeholder="Leaving from"  onChange={(event, newValue) => setDeparture(newValue)} required />
+                            <Autocomplete color={depInvalid ? "danger" : "neutral"} size="lg" options={data.locations} sx={{maxWidth: "14rem"}} startDecorator={<LocationSearchingIcon sx={depInvalid ? { color: "#d86d6e" } : {}} />} placeholder="Leaving from" onChange={(event, newValue) => setDeparture(newValue)} required />
                         </FormControl>
                         <FormControl>
                             <Autocomplete color={arrivalInvalid ? "danger" : "neutral"} size="lg" options={data.locations} sx={{maxWidth: "14rem"}} startDecorator={<LocationSearchingIcon sx={arrivalInvalid ? { color: "#d86d6e" } : {}} />} placeholder="Going to" onChange={(event, newValue) => setArrival(newValue)} required />
@@ -179,4 +177,4 @@ export function Home()
         </>
     )
 }
-// maybe change the date input to not only day and manth input
+// maybe change the date input to not only day and manth input ... just maybe
