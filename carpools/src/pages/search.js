@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Autocomplete, Box, Stack } from "@mui/joy";
+import React, { useEffect, useState } from "react";
+import { Autocomplete, Stack } from "@mui/joy";
 import Card from '@mui/joy/Card';
 import CardActions from '@mui/joy/CardActions';
 import CardContent from '@mui/joy/CardContent';
@@ -11,13 +11,24 @@ import Option from '@mui/joy/Option';
 import Typography from '@mui/joy/Typography';
 import LocationSearchingIcon from '@mui/icons-material/LocationSearching';
 import PersonIcon from '@mui/icons-material/Person';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import AirlineSeatReclineNormalIcon from '@mui/icons-material/AirlineSeatReclineNormal';
+import List from '@mui/joy/List';
+import ListItem from '@mui/joy/ListItem';
+import ListItemDecorator from '@mui/joy/ListItemDecorator';
+import Radio from '@mui/joy/Radio';
+import RadioGroup from '@mui/joy/RadioGroup';
 import data from "../data.json";
 import { useParams } from "react-router-dom";
+import { RideCard } from "../components/ridecard";
 
 export function Search()
 {
 
     const params = useParams();
+
+    const [rides, setRides] = useState([]);
 
     const [departure, setDeparture] = useState("");
     const [arrival, setArrival] = useState("");
@@ -63,6 +74,11 @@ export function Search()
         }
     }
 
+    useEffect(() => {
+        setRides(data.rides);
+        // alert(rides.length);
+    }, [])
+
     return(
         <>
                         <Card
@@ -104,6 +120,75 @@ export function Search()
                     </Stack>
                 </CardContent>
             </Card>
+            {
+                rides.length > 0 ?
+                <Stack direction={"row"} spacing={2} justifyContent={"center"} sx={{margin: "1rem"}}>
+                    <Card variant="plain" sx={{ maxWidth: "19rem", backgroundColor: "transparent" }}>
+                        <Typography level="h3" sx={{ mb: 0.5, color: "#555555" }}>
+                            Sort by
+                        </Typography>
+                        <RadioGroup aria-label="Your plan" name="people" defaultValue="Earliest departure">
+                            <List
+                                sx={{
+                                minWidth: 240,
+                                '--List-gap': '0.5rem',
+                                '--ListItem-paddingY': '0rem',
+                                '--ListItem-radius': '8px',
+                                '--ListItemDecorator-size': '32px',
+                                }}
+                            >
+                                {
+                                    ['Earliest departure', 'Lowest price', 'Available seats'].map((item, index) => (
+                                    <ListItem variant="plain" key={item} sx={{ boxShadow: 'none' }}>
+                                        <ListItemDecorator>
+                                            {[<AccessTimeIcon />, <AttachMoneyIcon />, <AirlineSeatReclineNormalIcon />][index]}
+                                        </ListItemDecorator>
+                                        <Radio
+                                            overlay
+                                            value={item}
+                                            label={item}
+                                            sx={{ flexGrow: 1, flexDirection: 'row-reverse' }}
+                                            slotProps={{
+                                                action: ({ checked }) => ({
+                                                    sx: (theme) => ({
+                                                        ...(checked && {
+                                                        inset: -1,
+                                                        border: '0px solid',
+                                                        borderColor: 'transparent',
+                                                        }),
+                                                    }),
+                                                }),
+                                            }}
+                                        />
+                                    </ListItem>
+                                    ))
+                                }
+                            </List>
+                        </RadioGroup>
+                    </Card>
+                    <Stack direction={"column"} spacing={2}>
+                        {
+                            rides.map((ride) => {
+                                return(
+                                    <RideCard
+                                        key = {ride.driver_id}
+                                        driver_id = {ride.driver_id}
+                                        available_seats = {ride.available_seats}
+                                        departure_time = {ride.departure_time}
+                                        price_per_seat = {ride.price_per_seat}
+                                        departure_city = {ride.departure_city}
+                                        departure_region = {ride.departure_region}
+                                        destination_city = {ride.destination_city}
+                                        destination_region = {ride.destination_region}
+                                        review = {ride.review}
+                                    />
+                                )
+                            })
+                        }
+                    </Stack>
+                </Stack> :
+                <></>
+            }
         </>
     )
 }
