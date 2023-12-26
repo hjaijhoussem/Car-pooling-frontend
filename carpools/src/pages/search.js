@@ -22,6 +22,7 @@ import RadioGroup from '@mui/joy/RadioGroup';
 import data from "../data.json";
 import { useParams } from "react-router-dom";
 import { RideCard } from "../components/ridecard";
+import { Pagination } from "../components/pagination";
 
 export function Search()
 {
@@ -29,11 +30,17 @@ export function Search()
     const params = useParams();
 
     const [rides, setRides] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [ridesPerPage, setRidesPerPage] = useState(4);
 
-    const [departure, setDeparture] = useState("");
-    const [arrival, setArrival] = useState("");
-    const [date, setDate] = useState("");
-    const [passengersnb, setPassengersnb] = useState(1);
+    const lastRideIndex = currentPage * ridesPerPage;
+    const firstRideIndex = lastRideIndex - ridesPerPage;
+    const currentRides = rides.slice(firstRideIndex, lastRideIndex);
+
+    const [departure, setDeparture] = useState(params.departure);
+    const [arrival, setArrival] = useState(params.arrival);
+    const [date, setDate] = useState(params.date);
+    const [passengersnb, setPassengersnb] = useState(params.passengersnb ? params.passengersnb : "1");
 
     const [depInvalid, setDepInvalid ] = useState(false);
     const [arrivalInvalid, setArrivalInvalid ] = useState(false);
@@ -72,11 +79,19 @@ export function Search()
             setDateInvalid(true);
             return;
         }
+
+        setDepInvalid(false);
+        setArrivalInvalid(false);
+        setDateInvalid(false);
+
+        setRides(data.rides);
     }
 
     useEffect(() => {
-        setRides(data.rides);
-        // alert(rides.length);
+        if(params.departure)
+        {
+            handleSubmit();
+        }
     }, [])
 
     return(
@@ -94,15 +109,15 @@ export function Search()
                 <CardContent>
                     <Stack direction={"row"} spacing={2} justifyContent={"center"}>
                         <FormControl>
-                            <Autocomplete color={depInvalid ? "danger" : "neutral"} size="lg" options={data.locations} defaultValue={params.departure} sx={{maxWidth: "14rem"}} startDecorator={<LocationSearchingIcon />} placeholder="Leaving from" onChange={(event, newValue) => setDeparture(newValue)} required />
+                            <Autocomplete color={depInvalid ? "danger" : "neutral"} size="lg" options={data.locations} defaultValue={departure} sx={{maxWidth: "14rem"}} startDecorator={<LocationSearchingIcon />} placeholder="Leaving from" onChange={(event, newValue) => setDeparture(newValue)} required />
                         </FormControl>
                         <FormControl>
-                            <Autocomplete color={arrivalInvalid ? "danger" : "neutral"} size="lg" options={data.locations} defaultValue={params.arrival} sx={{maxWidth: "14rem"}} startDecorator={<LocationSearchingIcon />} placeholder="Going to" onChange={(event, newValue) => setArrival(newValue)} required />
+                            <Autocomplete color={arrivalInvalid ? "danger" : "neutral"} size="lg" options={data.locations} defaultValue={arrival} sx={{maxWidth: "14rem"}} startDecorator={<LocationSearchingIcon />} placeholder="Going to" onChange={(event, newValue) => setArrival(newValue)} required />
                         </FormControl>
                         <FormControl>
-                            <Input color={dateInvalid ? "danger" : "neutral"} size="lg" defaultValue={params.date} type='date' onChange={(event) => setDate(event.target.value)} />
+                            <Input color={dateInvalid ? "danger" : "neutral"} size="lg" defaultValue={date} type='date' onChange={(event) => setDate(event.target.value)} />
                         </FormControl>
-                        <Select size="lg" startDecorator={<PersonIcon />} defaultValue={params.passengersnb ? params.passengersnb : "1"} onChange={handleChange}>
+                        <Select size="lg" startDecorator={<PersonIcon />} defaultValue={passengersnb} onChange={handleChange}>
                             <Option value="1">1 passenger</Option>
                             <Option value="2">2 passengers</Option>
                             <Option value="3">3 passengers</Option>
@@ -120,6 +135,7 @@ export function Search()
                     </Stack>
                 </CardContent>
             </Card>
+
             {
                 rides.length > 0 ?
                 <Stack direction={"row"} spacing={2} justifyContent={"center"} sx={{margin: "1rem"}}>
@@ -168,10 +184,10 @@ export function Search()
                     </Card>
                     <Stack direction={"column"} spacing={2}>
                         {
-                            rides.map((ride) => {
+                            currentRides.map((ride, index) => {
                                 return(
                                     <RideCard
-                                        key = {ride.driver_id}
+                                        key = {index}
                                         driver_id = {ride.driver_id}
                                         available_seats = {ride.available_seats}
                                         departure_time = {ride.departure_time}
@@ -185,6 +201,12 @@ export function Search()
                                 )
                             })
                         }
+                        <Pagination
+                            totalRides={rides.length}
+                            ridesPerPage={ridesPerPage}
+                            setCurrentPage={setCurrentPage}
+                            currentPage={currentPage}
+                        />
                     </Stack>
                 </Stack> :
                 <></>

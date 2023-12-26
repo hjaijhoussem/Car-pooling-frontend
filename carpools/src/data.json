@@ -105,6 +105,38 @@
             "destination_region": "Raftel",
             "status": "available",
             "review": 4
+        },
+        {
+            "available_seats": 4,
+            "departure_time": "8 am",
+            "driver_id": "driver six",
+            "price_per_seat": 28,
+            "created_at": "01-07-2023",
+            "departure_date": "01-11-2023",
+            "phone_number": 12345678,
+            "updated_at": "01-07-2023",
+            "departure_city": "Fishtown",
+            "destination_city": "Endtown",
+            "departure_region": "Atlantis",
+            "destination_region": "Raftel",
+            "status": "available",
+            "review": 4.8
+        },
+        {
+            "available_seats": 2,
+            "departure_time": "11 pm",
+            "driver_id": "driver seven",
+            "price_per_seat": 11,
+            "created_at": "01-07-2023",
+            "departure_date": "01-11-2023",
+            "phone_number": 12345678,
+            "updated_at": "01-07-2023",
+            "departure_city": "Fishtown",
+            "destination_city": "Endtown",
+            "departure_region": "Atlantis",
+            "destination_region": "Raftel",
+            "status": "available",
+            "review": 4.2
         }
     ]
 }
