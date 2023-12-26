@@ -41,6 +41,7 @@ export function Search()
     const [arrival, setArrival] = useState(params.arrival);
     const [date, setDate] = useState(params.date);
     const [passengersnb, setPassengersnb] = useState(params.passengersnb ? params.passengersnb : "1");
+    const [filter, setFilter] = useState("Earliest departure")
 
     const [depInvalid, setDepInvalid ] = useState(false);
     const [arrivalInvalid, setArrivalInvalid ] = useState(false);
@@ -49,6 +50,12 @@ export function Search()
     const handleChange = (event, newValue) => {
         setPassengersnb(newValue);
     };
+
+    function filterChange(item)
+    {
+        setFilter(item);
+        handleSubmit();
+    }
 
     function handleSubmit()
     {
@@ -143,7 +150,7 @@ export function Search()
                         <Typography level="h3" sx={{ mb: 0.5, color: "#555555" }}>
                             Sort by
                         </Typography>
-                        <RadioGroup aria-label="Your plan" name="people" defaultValue="Earliest departure">
+                        <RadioGroup aria-label="Your plan" name="people" defaultValue={filter}>
                             <List
                                 sx={{
                                 minWidth: 240,
@@ -154,7 +161,7 @@ export function Search()
                                 }}
                             >
                                 {
-                                    ['Earliest departure', 'Lowest price', 'Available seats'].map((item, index) => (
+                                    ["Earliest departure", "Lowest price", "Available seats"].map((item, index) => (
                                     <ListItem variant="plain" key={item} sx={{ boxShadow: 'none' }}>
                                         <ListItemDecorator>
                                             {[<AccessTimeIcon />, <AttachMoneyIcon />, <AirlineSeatReclineNormalIcon />][index]}
@@ -173,6 +180,7 @@ export function Search()
                                                         borderColor: 'transparent',
                                                         }),
                                                     }),
+                                                    onClick: filterChange(item)
                                                 }),
                                             }}
                                         />
