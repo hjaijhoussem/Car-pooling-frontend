@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import Card from '@mui/joy/Card';
 import CardActions from '@mui/joy/CardActions';
 import CardContent from '@mui/joy/CardContent';
@@ -39,19 +39,19 @@ export function Signup() {
         >
             <FormControl>
                 <FormLabel>First name</FormLabel>
-                <Input type='email' placeholder="Enter your First name" required />
+                <Input type='name' placeholder="Enter your First name" required />
             </FormControl>
             <FormControl>
                 <FormLabel>Last Name</FormLabel>
-                <Input type='email' placeholder="Enter your Last Name" required />
+                <Input type='name' placeholder="Enter your Last Name" required />
             </FormControl>
             <FormControl>
                 <FormLabel>ID number / CIN</FormLabel>
-                <Input type='email' placeholder="Enter your ID number" required />
+                <Input type="text" placeholder="Enter your ID number" required />
             </FormControl>
             <FormControl>
                 <FormLabel>Phone number</FormLabel>
-                <Input type='email' placeholder="Enter your Phone number" required />
+                <Input type='tel' placeholder="Enter your Phone number" required />
             </FormControl>
             <FormControl sx={{ gridColumn: '1/-1' }}>
                 <FormLabel>Email</FormLabel>

@@ -2,6 +2,9 @@ import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import { Box, Button, Grid, Stack, Typography } from "@mui/joy";
 import React from "react";
 import { NavLink } from "react-router-dom";
+import PersonIcon from '@mui/icons-material/Person';
+import SearchIcon from '@mui/icons-material/Search';
+import AddIcon from '@mui/icons-material/Add';
 
 export function Navbar()
 {
@@ -30,21 +33,21 @@ export function Navbar()
                     <Grid xs={8}>
                         <Stack direction={"row-reverse"} spacing={2} sx={{paddingRight: '7rem'}}>
                             <NavLink to = "/login">
-                                <Button variant="outlined" sx={{marginTop: '0.75rem', "&:hover": {backgroundColor: "#0099FF"}}}>
+                                <Button startDecorator = {<PersonIcon />} variant="outlined" sx={{color: '#FEFEFE', marginTop: '0.75rem', paddingLeft: "0.5rem", "&:hover": {backgroundColor: "#0099FF"}}}>
                                     <Typography sx={{color: '#FEFEFE'}}>
                                         Login
                                     </Typography>
                                 </Button>
                             </NavLink>
                             <NavLink to = "/offerride">
-                                <Button variant="outlined" sx={{marginTop: '0.75rem', "&:hover": {backgroundColor: "#0099FF"}}}>
+                                <Button startDecorator = {<AddIcon />} variant="outlined" sx={{color: '#FEFEFE', marginTop: '0.75rem', paddingLeft: "0.5rem", "&:hover": {backgroundColor: "#0099FF"}}}>
                                     <Typography sx={{color: '#FEFEFE'}}>
                                         Offer ride
                                     </Typography>
                                 </Button>
                             </NavLink>
                             <NavLink to = "/search">
-                                <Button variant="outlined" sx={{marginTop: '0.75rem', "&:hover": {backgroundColor: "#0099FF"}}}>
+                                <Button startDecorator = {<SearchIcon />} variant="outlined" sx={{color: '#FEFEFE', marginTop: '0.75rem', paddingLeft: "0.5rem", "&:hover": {backgroundColor: "#0099FF"}}}>
                                     <Typography sx={{color: '#FEFEFE'}}>
                                         Search
                                     </Typography>
