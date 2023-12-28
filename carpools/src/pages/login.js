@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useCallback, useEffect, useState } from "react";
 import Card from '@mui/joy/Card';
 import CardActions from '@mui/joy/CardActions';
 import CardContent from '@mui/joy/CardContent';
@@ -14,8 +14,99 @@ import PasswordIcon from '@mui/icons-material/Password';
 import LoginIcon from '@mui/icons-material/Login';
 import { FormHelperText } from '@mui/joy';
 import { NavLink } from 'react-router-dom';
+import { useCookies } from "react-cookie";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-export function Login() {
+export function Login()
+{
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [wrongEmail, setWrongEmail] = useState(false);
+  const [wrongPassword, setWrongPassword] = useState(false);
+
+  const [emptyEmail, setEmptyEmail] = useState(false);
+  const [emptyPassword, setEmptyPassword] = useState(false);
+
+  const [_, setCookies] = useCookies(["token"]);
+
+    const navigate = useNavigate();
+
+    const submitHandle = useCallback(async () => {
+
+      let shouldReturn = false;
+
+      setWrongEmail(false);
+      setWrongPassword(false);
+
+      setEmptyEmail(false);
+      setEmptyPassword(false);
+
+      if(email === "")
+      {
+        setEmptyEmail(true);
+        shouldReturn = true;
+      }
+      if(password === "")
+      {
+        setEmptyPassword(true);
+        shouldReturn = true;
+      }
+      if(shouldReturn)
+      {
+        return;
+      }
+
+      try
+      {
+        const response = await axios.post("http://localhost:8088/api/v1/auth/authenticate", {
+          email,
+          password
+        });
+
+        console.log(response);
+
+        if(response.data.token)
+        {
+          setCookies("token", response.data.token);
+          // window.localStorage.setItem("userID", response.data.userID);
+          navigate("/");
+        }
+        else
+        {
+          alert(response.data.statusCode + " " + response.data.message);
+        }
+      }
+      catch (err)
+      {
+        if(err.response.data.message === "User not found")
+        {
+          setWrongEmail(true);
+        }
+        if(err.response.data.message === "Incorrect password")
+        {
+          setWrongPassword(true);
+        }
+      }
+    }, [email, password, navigate, setCookies]);
+
+    useEffect(() => {
+      const keyDownHandler = event => {
+        if (event.key === "Enter" || event.keyCode === 13) {
+          event.preventDefault();
+          
+          submitHandle();
+        }
+      };
+  
+      document.addEventListener('keydown', keyDownHandler);
+  
+      return () => {
+        document.removeEventListener('keydown', keyDownHandler);
+      };
+    }, [submitHandle]);
+
   return (
     <>
       <Card
@@ -40,16 +131,18 @@ export function Login() {
         >
           <FormControl sx={{ gridColumn: '1/-1' }}>
             <FormLabel>Email</FormLabel>
-            <Input endDecorator={<EmailOutlinedIcon />}  type='email' placeholder="Enter your email" required />
+            <Input color={wrongEmail || emptyEmail ? "danger" : "neutral"} endDecorator={<EmailOutlinedIcon sx={{color: wrongEmail || emptyEmail ? "#c71c1c" : "neutral"}} />}  type='email' onChange={(event) => setEmail(event.target.value)} placeholder="Enter your email" required />
+            <FormHelperText sx={{display: wrongEmail || emptyEmail ? "inline" : "none", color: "#c71c1c", marginLeft: "0.7rem"}}>{wrongEmail ? "Email doesn't exist.": "This field is required"}</FormHelperText>
           </FormControl>
           <FormControl sx={{ gridColumn: '1/-1' }}>
             <FormLabel>Password</FormLabel>
-            <Input endDecorator={<PasswordIcon />} type='password' placeholder="Enter your password" required />
+            <Input color={wrongPassword || emptyPassword ? "danger" : "neutral"} endDecorator={<PasswordIcon sx={{color: wrongPassword || emptyPassword ? "#c71c1c" : "neutral"}} />} type='password' onChange={(event) => setPassword(event.target.value)} placeholder="Enter your password" required />
+            <FormHelperText sx={{display: wrongPassword || emptyPassword ? "inline" : "none", color: "#c71c1c", marginLeft: "0.7rem"}}>{wrongPassword ? "Incorrect password.": "This field is required"}</FormHelperText>
           </FormControl>
           <Checkbox variant='outlined' label="Remember me" sx={{ gridColumn: '1/-1', my: 1 }} />
           <Divider inset="none" sx={{ gridColumn: '1/-1', marginTop: "-0.3rem" }} />
           <CardActions sx={{ gridColumn: '1/-1', padding: "0rem" }}>
-            <Button variant="solid" sx={{maxWidth: '7rem', margin: 'auto', backgroundColor: '#00A9FF', "&:hover": {backgroundColor: '#0099FF'}}}>
+            <Button variant="solid" sx={{maxWidth: '7rem', margin: 'auto', backgroundColor: '#00A9FF', "&:hover": {backgroundColor: '#0099FF'}}} onClick={submitHandle}>
               Login
             </Button>
           </CardActions>
