@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Autocomplete, Stack } from "@mui/joy";
 import Card from '@mui/joy/Card';
 import CardActions from '@mui/joy/CardActions';
@@ -57,8 +57,46 @@ export function Search()
         handleSubmit();
     }
 
-    function handleSubmit()
-    {
+    // function handleSubmit()
+    // {
+    //     if (!(departure))
+    //     {
+    //         if (!(arrival))
+    //         {
+    //             if (!(date))
+    //             {
+    //                 setDateInvalid(true);
+    //             }
+    //             setArrivalInvalid(true);
+    //         }
+    //         setDepInvalid(true);
+    //         return;
+    //     }
+    //     if (!(arrival))
+    //     {
+    //         if (!(date))
+    //         {
+    //             setDateInvalid(true);
+    //         }
+    //         setArrivalInvalid(true);
+    //         return;
+    //     }
+    //     if (!(date))
+    //     {
+    //         setDateInvalid(true);
+    //         return;
+    //     }
+
+    //     setDepInvalid(false);
+    //     setArrivalInvalid(false);
+    //     setDateInvalid(false);
+
+    //     setRides(data.rides);
+    // }
+
+    // remove the above function if the usecallback one works
+
+    const handleSubmit = useCallback(async () => {
         if (!(departure))
         {
             if (!(arrival))
@@ -92,18 +130,18 @@ export function Search()
         setDateInvalid(false);
 
         setRides(data.rides);
-    }
+    },[arrival, date, departure])
 
     useEffect(() => {
         if(params.departure)
         {
             handleSubmit();
         }
-    }, [])
+    }, [handleSubmit, params.departure]) // gotta add the function cuz later it will async, in which case it essential to put it in that array
 
     return(
         <>
-                        <Card
+            <Card
             variant="outlined"
             sx={{
                 maxHeight: 'max-content',

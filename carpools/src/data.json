@@ -1,4 +1,5 @@
 {
+    "apiurl": "http://localhost:8088",
     "locations": [
         "Ariana",
         "Béja",

@@ -17,6 +17,7 @@ import { NavLink } from 'react-router-dom';
 import { useCookies } from "react-cookie";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import data from "../data.json";
 
 export function Login()
 {
@@ -60,7 +61,7 @@ export function Login()
 
       try
       {
-        const response = await axios.post("http://localhost:8088/api/v1/auth/authenticate", {
+        const response = await axios.post(data.apiurl + "/api/v1/auth/authenticate", {
           email,
           password
         });
