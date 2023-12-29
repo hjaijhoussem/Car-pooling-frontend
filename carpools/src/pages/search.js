@@ -23,6 +23,7 @@ import data from "../data.json";
 import { useParams } from "react-router-dom";
 import { RideCard } from "../components/ridecard";
 import { Pagination } from "../components/pagination";
+import axios from "axios";
 
 export function Search()
 {
@@ -57,46 +58,12 @@ export function Search()
         handleSubmit();
     }
 
-    // function handleSubmit()
-    // {
-    //     if (!(departure))
-    //     {
-    //         if (!(arrival))
-    //         {
-    //             if (!(date))
-    //             {
-    //                 setDateInvalid(true);
-    //             }
-    //             setArrivalInvalid(true);
-    //         }
-    //         setDepInvalid(true);
-    //         return;
-    //     }
-    //     if (!(arrival))
-    //     {
-    //         if (!(date))
-    //         {
-    //             setDateInvalid(true);
-    //         }
-    //         setArrivalInvalid(true);
-    //         return;
-    //     }
-    //     if (!(date))
-    //     {
-    //         setDateInvalid(true);
-    //         return;
-    //     }
-
-    //     setDepInvalid(false);
-    //     setArrivalInvalid(false);
-    //     setDateInvalid(false);
-
-    //     setRides(data.rides);
-    // }
-
-    // remove the above function if the usecallback one works
-
     const handleSubmit = useCallback(async () => {
+        
+        setDepInvalid(false);
+        setArrivalInvalid(false);
+        setDateInvalid(false);
+        
         if (!(departure))
         {
             if (!(arrival))
@@ -125,11 +92,16 @@ export function Search()
             return;
         }
 
-        setDepInvalid(false);
-        setArrivalInvalid(false);
-        setDateInvalid(false);
-
-        setRides(data.rides);
+        try
+        {
+            var response = await axios.get(data.apiurl + "/api/v1/user/rides");
+            console.log(response);
+            setRides(response.data);
+        }
+        catch (err)
+        {
+            console.log(err);
+        }
     },[arrival, date, departure])
 
     useEffect(() => {
@@ -184,7 +156,7 @@ export function Search()
             {
                 rides.length > 0 ?
                 <Stack direction={"row"} spacing={2} justifyContent={"center"} sx={{margin: "1rem"}}>
-                    <Card variant="plain" sx={{ maxWidth: "19rem", backgroundColor: "transparent" }}>
+                    {/* <Card variant="plain" sx={{ maxWidth: "19rem", backgroundColor: "transparent" }}>
                         <Typography level="h3" sx={{ mb: 0.5, color: "#555555" }}>
                             Sort by
                         </Typography>
@@ -227,22 +199,25 @@ export function Search()
                                 }
                             </List>
                         </RadioGroup>
-                    </Card>
+                    </Card> */}
+
+                    {/* the commented section, which is for the filters selection, is the what causes the submitHandle function to be called an infinite number of times */}
+                    
                     <Stack direction={"column"} spacing={2}>
                         {
                             currentRides.map((ride, index) => {
                                 return(
                                     <RideCard
                                         key = {index}
-                                        driver_id = {ride.driver_id}
-                                        available_seats = {ride.available_seats}
-                                        departure_time = {ride.departure_time}
-                                        price_per_seat = {ride.price_per_seat}
-                                        departure_city = {ride.departure_city}
-                                        departure_region = {ride.departure_region}
-                                        destination_city = {ride.destination_city}
-                                        destination_region = {ride.destination_region}
-                                        review = {ride.review}
+                                        driver_id = {ride.driver.firstname + " " + ride.driver.lastname}
+                                        available_seats = {ride.availableSeats}
+                                        departure_time = {"10 am"}
+                                        price_per_seat = {ride.pricePerSeat}
+                                        departure_city = {ride.departureCity}
+                                        departure_region = {ride.departureRegion}
+                                        destination_city = {ride.destinationCity}
+                                        destination_region = {ride.destinationRegion}
+                                        review = {4.7}
                                     />
                                 )
                             })
