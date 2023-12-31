@@ -12,7 +12,7 @@ export function RideCard(props)
 {
     return(
         <>
-            <Card sx={{paddingTop: "0.77rem", paddingBottom: "0.5rem", width: "25rem"}}>
+            <Card sx={{paddingTop: "0.77rem", paddingBottom: "0.5rem", width: "33rem"}}>
                 <Grid container spacing={2} columns={16} sx={{ flexGrow: 1 }}>
                     <Grid xs={8}>
                         <div>

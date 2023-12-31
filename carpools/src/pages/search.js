@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Autocomplete, Stack } from "@mui/joy";
+import { Autocomplete, FormLabel, Stack } from "@mui/joy";
 import Card from '@mui/joy/Card';
 import CardActions from '@mui/joy/CardActions';
 import CardContent from '@mui/joy/CardContent';
@@ -8,15 +8,8 @@ import Input from '@mui/joy/Input';
 import Button from '@mui/joy/Button';
 import Select from '@mui/joy/Select';
 import Option from '@mui/joy/Option';
-import Typography from '@mui/joy/Typography';
 import LocationSearchingIcon from '@mui/icons-material/LocationSearching';
 import PersonIcon from '@mui/icons-material/Person';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
-import AirlineSeatReclineNormalIcon from '@mui/icons-material/AirlineSeatReclineNormal';
-import List from '@mui/joy/List';
-import ListItem from '@mui/joy/ListItem';
-import ListItemDecorator from '@mui/joy/ListItemDecorator';
 import Radio from '@mui/joy/Radio';
 import RadioGroup from '@mui/joy/RadioGroup';
 import data from "../data.json";
@@ -42,7 +35,7 @@ export function Search()
     const [arrival, setArrival] = useState(params.arrival);
     const [date, setDate] = useState(params.date);
     const [passengersnb, setPassengersnb] = useState(params.passengersnb ? params.passengersnb : "1");
-    const [filter, setFilter] = useState("Earliest departure")
+    const [filter, setFilter] = useState("earliest departure");
 
     const [depInvalid, setDepInvalid ] = useState(false);
     const [arrivalInvalid, setArrivalInvalid ] = useState(false);
@@ -155,53 +148,22 @@ export function Search()
 
             {
                 rides.length > 0 ?
-                <Stack direction={"row"} spacing={2} justifyContent={"center"} sx={{margin: "1rem"}}>
-                    {/* <Card variant="plain" sx={{ maxWidth: "19rem", backgroundColor: "transparent" }}>
-                        <Typography level="h3" sx={{ mb: 0.5, color: "#555555" }}>
-                            Sort by
-                        </Typography>
-                        <RadioGroup aria-label="Your plan" name="people" defaultValue={filter}>
-                            <List
-                                sx={{
-                                minWidth: 240,
-                                '--List-gap': '0.5rem',
-                                '--ListItem-paddingY': '0rem',
-                                '--ListItem-radius': '8px',
-                                '--ListItemDecorator-size': '32px',
-                                }}
-                            >
-                                {
-                                    ["Earliest departure", "Lowest price", "Available seats"].map((item, index) => (
-                                    <ListItem variant="plain" key={item} sx={{ boxShadow: 'none' }}>
-                                        <ListItemDecorator>
-                                            {[<AccessTimeIcon />, <AttachMoneyIcon />, <AirlineSeatReclineNormalIcon />][index]}
-                                        </ListItemDecorator>
-                                        <Radio
-                                            overlay
-                                            value={item}
-                                            label={item}
-                                            sx={{ flexGrow: 1, flexDirection: 'row-reverse' }}
-                                            slotProps={{
-                                                action: ({ checked }) => ({
-                                                    sx: (theme) => ({
-                                                        ...(checked && {
-                                                        inset: -1,
-                                                        border: '0px solid',
-                                                        borderColor: 'transparent',
-                                                        }),
-                                                    }),
-                                                    onClick: filterChange(item)
-                                                }),
-                                            }}
-                                        />
-                                    </ListItem>
-                                    ))
-                                }
-                            </List>
+                <Stack direction={"row"} spacing={11} justifyContent={"center"} sx={{margin: "1rem"}}>
+                    
+                    <FormControl>
+                        <FormLabel sx={{fontSize: "1.77rem", color: "#555555"}}>Sort by</FormLabel>
+                        <RadioGroup
+                            defaultValue="earliest departure"
+                            name="filters"
+                            value={filter}
+                            onChange={(event) => filterChange(event.target.value)}
+                            sx={{ my: 0.1 }}
+                        >
+                            <Radio sx={{fontSize: "1.2rem"}} value="earliest departure" label="Earliest departure" />
+                            <Radio sx={{fontSize: "1.2rem"}} value="lowest price" label="Lowest price" />
+                            <Radio sx={{fontSize: "1.2rem"}} value="available seats" label="Available seats" />
                         </RadioGroup>
-                    </Card> */}
-
-                    {/* the commented section, which is for the filters selection, is the what causes the submitHandle function to be called an infinite number of times */}
+                    </FormControl>
                     
                     <Stack direction={"column"} spacing={2}>
                         {
@@ -229,6 +191,7 @@ export function Search()
                             currentPage={currentPage}
                         />
                     </Stack>
+
                 </Stack> :
                 <></>
             }
