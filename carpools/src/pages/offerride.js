@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Card from '@mui/joy/Card';
 import CardActions from '@mui/joy/CardActions';
 import CardContent from '@mui/joy/CardContent';
@@ -15,6 +15,8 @@ import LocationSearchingIcon from '@mui/icons-material/LocationSearching';
 import PersonIcon from '@mui/icons-material/Person';
 import { FormHelperText, Option, Select, Textarea } from '@mui/joy';
 import data from "../data.json";
+import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
 
 export function Offerride()
 {
@@ -31,6 +33,10 @@ export function Offerride()
     const [dateInvalid, setDateInvalid ] = useState(false);
     const [timeInvalid, setTimeInvalid ] = useState(false);
     const [priceInvalid, setPriceInvalid ] = useState(false);
+
+    const [cookies] = useCookies(["token"]);
+
+    const navigate = useNavigate();
 
     const handleChange = (event, newValue) => {
         setPassengersnb(newValue);
@@ -70,6 +76,13 @@ export function Offerride()
             return;
         }
     }
+
+    useEffect(() => {
+        if(!(cookies.token))
+        {
+            navigate("/login");
+        }
+    })
 
     return (
         <>

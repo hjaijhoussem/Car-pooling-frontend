@@ -32,10 +32,11 @@ export function Navbar()
                     </Grid>
                     <Grid xs={8}>
                         <Stack direction={"row-reverse"} spacing={2} sx={{paddingRight: '7rem'}}>
-                            <NavLink to = "/login">
+                            <NavLink to = {window.localStorage.getItem("MAHCarpoolsEmail") ? "/" : "/login"}>
                                 <Button startDecorator = {<PersonIcon />} variant="outlined" sx={{color: '#FEFEFE', marginTop: '0.75rem', paddingLeft: "0.5rem", "&:hover": {backgroundColor: "#0099FF"}}}>
                                     <Typography sx={{color: '#FEFEFE'}}>
-                                        Login
+                                        {window.localStorage.getItem("MAHCarpoolsEmail") ? window.localStorage.getItem("MAHCarpoolsEmail") : "Login"}
+                                        {/* make it so that the localstorage is a state var */}
                                     </Typography>
                                 </Button>
                             </NavLink>

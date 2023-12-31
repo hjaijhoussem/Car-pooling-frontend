@@ -71,7 +71,7 @@ export function Login()
         if(response.data.token)
         {
           setCookies("token", response.data.token);
-          // window.localStorage.setItem("userID", response.data.userID);
+          window.localStorage.setItem("MAHCarpoolsEmail", email);
           navigate("/");
         }
         else

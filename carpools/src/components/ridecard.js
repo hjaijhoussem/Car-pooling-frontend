@@ -6,10 +6,14 @@ import Typography from '@mui/joy/Typography';
 import Stack from '@mui/joy/Stack';
 import PersonIcon from '@mui/icons-material/Person';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
+import AirlineSeatReclineNormalIcon from '@mui/icons-material/AirlineSeatReclineNormal';
 import { Button, CardActions, CardContent, Grid } from "@mui/joy";
 
 export function RideCard(props)
 {
+    const timestamp = new Date("2001-09-20T" + props.departure_time);
+    const departure_time = timestamp.toLocaleTimeString();
+
     return(
         <>
             <Card sx={{paddingTop: "0.77rem", paddingBottom: "0.5rem", width: "33rem"}}>
@@ -34,7 +38,7 @@ export function RideCard(props)
                             <Typography>{props.departure_region}, {props.departure_city}</Typography>
                             <Stack spacing={0} sx={{marginTop: "-0.7rem"}}>
                             <Typography level="body-sm">
-                                {props.departure_time}
+                                {departure_time.includes("PM") || departure_time.includes("AM") ? departure_time.slice(0, 4) + " " + departure_time.slice(-2, departure_time.length) : props.departure_time}, {props.departure_date}
                             </Typography>
                             </Stack>
                         </Step>
@@ -42,6 +46,7 @@ export function RideCard(props)
                             <Typography>{props.destination_region}, {props.destination_city}</Typography>
                         </Step>
                     </Stepper>
+                    <Typography startDecorator = {<AirlineSeatReclineNormalIcon />} sx={{marginTop: "0.7rem"}}>{props.available_seats} {props.available_seats == 1 ? "seat" : "seats"} available</Typography>
                 </CardContent>
                 <CardActions sx={{margin: "0rem", padding: "0rem"}}>
                     <Button variant="solid" sx={{maxWidth: '8.7rem', margin: '0rem auto 0rem auto', backgroundColor: '#00A9FF', "&:hover": {backgroundColor: '#0099FF'}}}>

@@ -87,7 +87,7 @@ export function Search()
 
         try
         {
-            var response = await axios.get(data.apiurl + "/api/v1/user/rides");
+            var response = await axios.get(data.apiurl + `/api/v1/user/rides?departureDate=${date}&availableSeats=${passengersnb}&departureRegion=${departure.toUpperCase()}&destinationRegion=${arrival.toUpperCase()}`);
             console.log(response);
             setRides(response.data);
         }
@@ -95,7 +95,7 @@ export function Search()
         {
             console.log(err);
         }
-    },[arrival, date, departure])
+    },[arrival, date, departure, passengersnb])
 
     useEffect(() => {
         if(params.departure)
@@ -173,12 +173,14 @@ export function Search()
                                         key = {index}
                                         driver_id = {ride.driver.firstname + " " + ride.driver.lastname}
                                         available_seats = {ride.availableSeats}
-                                        departure_time = {"10 am"}
+                                        departure_time = {ride.departureDate.slice(11, 16)}
+                                        departure_date = {ride.departureDate.slice(0, 10)}
                                         price_per_seat = {ride.pricePerSeat}
                                         departure_city = {ride.departureCity}
                                         departure_region = {ride.departureRegion}
                                         destination_city = {ride.destinationCity}
                                         destination_region = {ride.destinationRegion}
+                                        passengersnb = {passengersnb}
                                         review = {4.7}
                                     />
                                 )
