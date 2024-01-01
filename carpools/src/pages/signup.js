@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Card from '@mui/joy/Card';
 import CardActions from '@mui/joy/CardActions';
 import CardContent from '@mui/joy/CardContent';
@@ -39,7 +39,7 @@ export function Signup()
 
   const [emailAlreadyExists, setEmailAlreadyExists] = useState(false);
 
-  const [_, setCookies] = useCookies(["token"]);
+  const [cookies, setCookies] = useCookies(["token"]);
 
     const navigate = useNavigate();
 
@@ -116,8 +116,8 @@ export function Signup()
         if(response.data.token)
         {
           setCookies("token", response.data.token);
-          // window.localStorage.setItem("userID", response.data.userID);
-          navigate("/");
+          setCookies("MAHCemail", email);
+          navigate(0);
         }
       }
       catch (err)
@@ -130,6 +130,13 @@ export function Signup()
         // }
       }
     }, [email, password, firstname, lastname, cin, phoneNumber, navigate, setCookies]);
+
+    useEffect(() => {
+      if(cookies.token)
+      {
+        navigate("/");
+      }
+    },[])
 
   return (
     <>
