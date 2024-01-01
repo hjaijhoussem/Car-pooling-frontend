@@ -13,10 +13,13 @@ import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import AddIcon from '@mui/icons-material/Add';
 import LocationSearchingIcon from '@mui/icons-material/LocationSearching';
 import PersonIcon from '@mui/icons-material/Person';
-import { FormHelperText, Option, Select, Textarea } from '@mui/joy';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import { FormHelperText, Option, Select, Snackbar, Textarea } from '@mui/joy';
 import data from "../data.json";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export function Offerride()
 {
@@ -34,6 +37,9 @@ export function Offerride()
     const [timeInvalid, setTimeInvalid ] = useState(false);
     const [priceInvalid, setPriceInvalid ] = useState(false);
 
+    const [success, setSuccess] = useState(false);
+    const [error, setError] = useState(false);
+
     const [cookies] = useCookies(["token"]);
 
     const navigate = useNavigate();
@@ -42,7 +48,7 @@ export function Offerride()
         setPassengersnb(newValue);
     };
 
-    function handleSubmit()
+    async function handleSubmit()
     {
         let shouldReturn = false;
 
@@ -74,6 +80,35 @@ export function Offerride()
         if(shouldReturn)
         {
             return;
+        }
+        try
+        {
+            const response = await axios.post(data.apiurl + "/api/v1/user/rides", {
+                availableSeats: passengersnb,
+                pricePerSeat: price,
+                departureDate: `${date}T${time}`,
+                departureRegion: departure.toUpperCase(),
+                destinationRegion: arrival.toUpperCase(),
+                departureCity: "main city",
+                destinationCity: "main city"
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${cookies.token}`
+                }
+            });
+
+            console.log(response);
+
+            if(response.status === 201)
+            {
+                setSuccess(true);
+            }
+        }
+        catch (err)
+        {
+            console.log(err.response.data);
+            setError(true);
         }
     }
 
@@ -154,6 +189,36 @@ export function Offerride()
             <FormControl>
                 <FormHelperText sx={{margin: "auto", padding: "1rem"}}>More details about you will be added automatically</FormHelperText>
             </FormControl>
+            <Snackbar
+                sx={{backgroundColor: "#CDEFCF"}}
+                autoHideDuration={3000}
+                open={success}
+                variant={"outlined"}
+                startDecorator = {<CheckCircleOutlineIcon color="success" />}
+                onClose={(event, reason) => {
+                if (reason === 'clickaway') {
+                    return;
+                }
+                setSuccess(false);
+                }}
+            >
+                Ride offered with success.
+            </Snackbar>
+            <Snackbar
+                sx={{backgroundColor: "#FFDFDF"}}
+                autoHideDuration={3000}
+                open={error}
+                variant={"outlined"}
+                startDecorator = {<ErrorOutlineIcon sx={{color: "#c71c1c"}} />}
+                onClose={(event, reason) => {
+                if (reason === 'clickaway') {
+                    return;
+                }
+                setError(false);
+                }}
+            >
+                An error occured when offering ride.
+            </Snackbar>
         </>
     );
 }
