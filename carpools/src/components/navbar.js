@@ -1,13 +1,19 @@
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import { Box, Button, Grid, Stack, Typography } from "@mui/joy";
-import React from "react";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import PersonIcon from '@mui/icons-material/Person';
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
+import { useCookies } from 'react-cookie';
 
 export function Navbar()
 {
+
+    const [cookies, setCookies] = useCookies(["token", "MAHCemail"]);
+
+    const [loggedin, setLoggedin] = useState(cookies.MAHCemail ? cookies.MAHCemail : "login");
+
     return(
         <>
             <Box 
@@ -32,10 +38,10 @@ export function Navbar()
                     </Grid>
                     <Grid xs={8}>
                         <Stack direction={"row-reverse"} spacing={2} sx={{paddingRight: '7rem'}}>
-                            <NavLink to = {window.localStorage.getItem("MAHCarpoolsEmail") ? "/" : "/login"}>
+                            <NavLink to = {loggedin === "login" ? "/login" : "/"}>
                                 <Button startDecorator = {<PersonIcon />} variant="outlined" sx={{color: '#FEFEFE', marginTop: '0.75rem', paddingLeft: "0.5rem", "&:hover": {backgroundColor: "#0099FF"}}}>
                                     <Typography sx={{color: '#FEFEFE'}}>
-                                        {window.localStorage.getItem("MAHCarpoolsEmail") ? window.localStorage.getItem("MAHCarpoolsEmail") : "Login"}
+                                        {loggedin === "login" ? "Login" : loggedin}
                                         {/* make it so that the localstorage is a state var */}
                                     </Typography>
                                 </Button>

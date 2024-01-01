@@ -30,7 +30,7 @@ export function Login()
   const [emptyEmail, setEmptyEmail] = useState(false);
   const [emptyPassword, setEmptyPassword] = useState(false);
 
-  const [_, setCookies] = useCookies(["token"]);
+  const [cookies, setCookies] = useCookies(["token", "MAHCemail"]);
 
     const navigate = useNavigate();
 
@@ -71,8 +71,8 @@ export function Login()
         if(response.data.token)
         {
           setCookies("token", response.data.token);
-          window.localStorage.setItem("MAHCarpoolsEmail", email);
-          navigate("/");
+          setCookies("MAHCemail", email);
+          navigate(0);
         }
         else
         {
@@ -91,6 +91,13 @@ export function Login()
         }
       }
     }, [email, password, navigate, setCookies]);
+
+    useEffect(() => {
+      if(cookies.token)
+      {
+        navigate("/");
+      }
+    },[])
 
     useEffect(() => {
       const keyDownHandler = event => {
