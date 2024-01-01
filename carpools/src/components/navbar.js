@@ -1,7 +1,7 @@
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
-import { Box, Button, Grid, Stack, Typography } from "@mui/joy";
+import { Box, Button, Dropdown, Grid, ListDivider, Menu, MenuButton, MenuItem, Stack, Typography } from "@mui/joy";
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import PersonIcon from '@mui/icons-material/Person';
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
@@ -10,9 +10,18 @@ import { useCookies } from 'react-cookie';
 export function Navbar()
 {
 
-    const [cookies, setCookies] = useCookies(["token", "MAHCemail"]);
+    const [cookies, setCookies, removeCookies] = useCookies(["token", "MAHCemail"]);
+
+    const navigate = useNavigate();
 
     const [loggedin, setLoggedin] = useState(cookies.MAHCemail ? cookies.MAHCemail : "login");
+    
+    function logout()
+    {
+        removeCookies("token");
+        removeCookies("MAHCemail");
+        navigate(0);
+    };
 
     return(
         <>
@@ -38,14 +47,32 @@ export function Navbar()
                     </Grid>
                     <Grid xs={8}>
                         <Stack direction={"row-reverse"} spacing={2} sx={{paddingRight: '7rem'}}>
-                            <NavLink to = {loggedin === "login" ? "/login" : "/"}>
-                                <Button startDecorator = {<PersonIcon />} variant="outlined" sx={{color: '#FEFEFE', marginTop: '0.75rem', paddingLeft: "0.5rem", "&:hover": {backgroundColor: "#0099FF"}}}>
-                                    <Typography sx={{color: '#FEFEFE'}}>
-                                        {loggedin === "login" ? "Login" : loggedin}
-                                        {/* make it so that the localstorage is a state var */}
-                                    </Typography>
-                                </Button>
-                            </NavLink>
+                            <Box sx={loggedin === "login" ? {display: "none"} : {}}>
+                                <Dropdown>
+                                    <MenuButton startDecorator = {<PersonIcon />} variant="outlined" sx={{color: '#FEFEFE', marginTop: '0.75rem', paddingLeft: "0.5rem", "&:hover": {backgroundColor: "#0099FF"}}}>
+                                        <Typography sx={{color: '#FEFEFE'}}>
+                                            {loggedin === "login" ? "Login" : loggedin}
+                                        </Typography>
+                                    </MenuButton>
+                                    <Menu sx={{minWidth: "12.3rem", backgroundColor: "#EFEFFF"}}>
+                                        <MenuItem>Profile</MenuItem>
+                                        <ListDivider />
+                                        <MenuItem>Rides</MenuItem>
+                                        <MenuItem>Ride requests</MenuItem>
+                                        <ListDivider />
+                                        <MenuItem onClick={logout}>Logout</MenuItem>
+                                    </Menu>
+                                </Dropdown>
+                            </Box>
+                            <Box sx={loggedin === "login" ? {} : {display: "none"}}>
+                                <NavLink to = {loggedin === "login" ? "/login" : "/"}>
+                                    <Button startDecorator = {<PersonIcon />} variant="outlined" sx={{color: '#FEFEFE', marginTop: '0.75rem', paddingLeft: "0.5rem", "&:hover": {backgroundColor: "#0099FF"}}}>
+                                        <Typography sx={{color: '#FEFEFE'}}>
+                                            {loggedin === "login" ? "Login" : loggedin}
+                                        </Typography>
+                                    </Button>
+                                </NavLink>
+                            </Box>
                             <NavLink to = "/offerride">
                                 <Button startDecorator = {<AddIcon />} variant="outlined" sx={{color: '#FEFEFE', marginTop: '0.75rem', paddingLeft: "0.5rem", "&:hover": {backgroundColor: "#0099FF"}}}>
                                     <Typography sx={{color: '#FEFEFE'}}>
