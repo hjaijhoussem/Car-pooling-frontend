@@ -58,7 +58,7 @@ export function Navbar()
                                         <MenuItem>Profile</MenuItem>
                                         <ListDivider />
                                         <MenuItem>Rides</MenuItem>
-                                        <MenuItem>Ride requests</MenuItem>
+                                        <MenuItem onClick={() => navigate("/myridereqs")}>Ride requests</MenuItem>
                                         <ListDivider />
                                         <MenuItem onClick={logout}>Logout</MenuItem>
                                     </Menu>

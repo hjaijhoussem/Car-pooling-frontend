@@ -83,7 +83,8 @@ export function Offerride()
         }
         try
         {
-            const response = await axios.post(data.apiurl + "/api/v1/user/rides", {
+            const response = await axios.post(data.apiurl + "/api/v1/user/rides",
+            {
                 availableSeats: passengersnb,
                 pricePerSeat: price,
                 departureDate: `${date}T${time}`,
@@ -107,7 +108,7 @@ export function Offerride()
         }
         catch (err)
         {
-            console.log(err.response.data);
+            console.log(err);
             setError(true);
         }
     }

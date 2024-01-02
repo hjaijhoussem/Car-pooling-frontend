@@ -6,6 +6,7 @@ import { Offerride } from './pages/offerride';
 import { Search } from './pages/search';
 import { Login } from './pages/login';
 import { Signup } from './pages/signup';
+import MyRideReqs from './pages/myridereqs';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route index element = {<Search />} />
           <Route path = ':departure/:arrival/:date/:passengersnb' element = {<Search />} />
         </Route>
+        <Route path = '/myridereqs' element = {<MyRideReqs />} />
         <Route path = '/login' element = {<Login />} />
         <Route path = '/signup' element = {<Signup />} />
       </Routes>
