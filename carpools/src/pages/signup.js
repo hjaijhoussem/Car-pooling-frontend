@@ -136,7 +136,8 @@ export function Signup()
       {
         navigate("/");
       }
-    },[])
+    },[cookies.token, navigate])
+    //add enter key press event listener in this useefect, thass why the handlesubmit function is wrapped in a usecallback
 
   return (
     <>

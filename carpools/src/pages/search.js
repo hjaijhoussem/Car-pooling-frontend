@@ -171,6 +171,7 @@ export function Search()
                                 return(
                                     <RideCard
                                         key = {index}
+                                        ride_id = {ride.id}
                                         driver_id = {ride.driver.firstname + " " + ride.driver.lastname}
                                         available_seats = {ride.availableSeats}
                                         departure_time = {ride.departureDate.slice(11, 16)}

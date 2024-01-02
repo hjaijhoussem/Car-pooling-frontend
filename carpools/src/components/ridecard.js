@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Card from "@mui/joy/Card";
 import Stepper from '@mui/joy/Stepper';
 import Step from '@mui/joy/Step';
@@ -7,12 +7,71 @@ import Stack from '@mui/joy/Stack';
 import PersonIcon from '@mui/icons-material/Person';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import AirlineSeatReclineNormalIcon from '@mui/icons-material/AirlineSeatReclineNormal';
-import { Button, CardActions, CardContent, Grid } from "@mui/joy";
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import { Button, CardActions, CardContent, Grid, Snackbar } from "@mui/joy";
+import data from "../data.json";
+import axios from "axios";
+import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
 
 export function RideCard(props)
 {
     const timestamp = new Date("2001-09-20T" + props.departure_time);
     const departure_time = timestamp.toLocaleTimeString();
+
+    const[cookies] = useCookies(["token"]);
+
+    const [success, setSuccess] = useState(false);
+    const [alreadyRequested, setAlreadyRequested] = useState(false);
+    const [error, setError] = useState(false);
+
+    const navigate = useNavigate();
+
+    async function reserve()
+    {
+        if(!(cookies.token))
+        {
+            navigate("/login");
+            return;
+        }
+        const date = new Date();
+        const formattedDate = `${date.getFullYear()}-${date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1}-${date.getDate() < 10 ? `0${date.getDate()}` : date.getDate()}T${date.getHours() < 10 ? `0${date.getHours()}` : date.getHours()}:${date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes()}`;
+        console.log(formattedDate);
+        console.log(typeof formattedDate);
+        console.log(props.ride_id);
+        console.log(props.passengersnb);
+
+        try
+        {
+            const response = await axios.post(data.apiurl + `/api/v1/passenger/${props.ride_id}/reserve`, {
+                requestedSeats: props.passengersnb,
+                createdAt: formattedDate
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${cookies.token}`
+                }
+            });
+
+            console.log(response);
+
+            if(response)
+            {
+                setSuccess(true);
+            }
+        }
+        catch (err)
+        {
+            console.log(err.response.data);
+            if(err.response.data.statusCode === 409)
+            {
+                setAlreadyRequested(true);
+                return;
+            }
+            setError(true);
+        }
+    }
 
     return(
         <>
@@ -46,14 +105,59 @@ export function RideCard(props)
                             <Typography>{props.destination_region}, {props.destination_city}</Typography>
                         </Step>
                     </Stepper>
-                    <Typography startDecorator = {<AirlineSeatReclineNormalIcon />} sx={{marginTop: "0.7rem"}}>{props.available_seats} {props.available_seats == 1 ? "seat" : "seats"} available</Typography>
+                    <Typography startDecorator = {<AirlineSeatReclineNormalIcon />} sx={{marginTop: "0.7rem"}}>{props.available_seats} {props.available_seats === 1 ? "seat" : "seats"} available</Typography>
                 </CardContent>
                 <CardActions sx={{margin: "0rem", padding: "0rem"}}>
-                    <Button variant="solid" sx={{maxWidth: '8.7rem', margin: '0rem auto 0rem auto', backgroundColor: '#00A9FF', "&:hover": {backgroundColor: '#0099FF'}}}>
+                    <Button variant="solid" sx={{maxWidth: '8.7rem', margin: '0rem auto 0rem auto', backgroundColor: '#00A9FF', "&:hover": {backgroundColor: '#0099FF'}}} onClick={reserve}>
                         Request to ride
                     </Button>
                 </CardActions>
             </Card>
+            <Snackbar
+                sx={{backgroundColor: "#CDEFCF"}}
+                autoHideDuration={3000}
+                open={success}
+                variant={"outlined"}
+                startDecorator = {<CheckCircleOutlineIcon color="success" />}
+                onClose={(event, reason) => {
+                if (reason === 'clickaway') {
+                    return;
+                }
+                setSuccess(false);
+                }}
+            >
+                Requested to ride with success.
+            </Snackbar>
+            <Snackbar
+                sx={{backgroundColor: "#FFDFDF"}}
+                autoHideDuration={3000}
+                open={alreadyRequested}
+                variant={"outlined"}
+                startDecorator = {<ErrorOutlineIcon sx={{color: "#c71c1c"}} />}
+                onClose={(event, reason) => {
+                if (reason === 'clickaway') {
+                    return;
+                }
+                setAlreadyRequested(false);
+                }}
+            >
+                You have already requested to reserve on this ride.
+            </Snackbar>
+            <Snackbar
+                sx={{backgroundColor: "#FFDFDF"}}
+                autoHideDuration={3000}
+                open={error}
+                variant={"outlined"}
+                startDecorator = {<ErrorOutlineIcon sx={{color: "#c71c1c"}} />}
+                onClose={(event, reason) => {
+                if (reason === 'clickaway') {
+                    return;
+                }
+                setError(false);
+                }}
+            >
+                An error occured when requesting to ride.
+            </Snackbar>
         </>
     )
 }
