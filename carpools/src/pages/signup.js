@@ -34,10 +34,13 @@ export function Signup()
   const [emptyCin, setEmptyCin] = useState(false);
   const [emptyPhoneNumber, setEmptyPhoneNumber] = useState(false);
 
+  const [invalidEmail, setInvalidEmail] = useState(false);
   const [invalidPhoneNumber, setInvalidPhoneNumber] = useState(false);
   const [invalidCin, setInvalidCin] = useState(false);
 
   const [emailAlreadyExists, setEmailAlreadyExists] = useState(false);
+  const [cinAlreadyExists, setCinAlreadyExists] = useState(false);
+  const [phoneNumberAlreadyExists, setPhoneNumberAlreadyExists] = useState(false);
 
   const [cookies, setCookies] = useCookies(["token"]);
 
@@ -54,8 +57,13 @@ export function Signup()
       setEmptyCin(false);
       setEmptyPhoneNumber(false);
 
+      setInvalidEmail(false);
       setInvalidCin(false);
       setInvalidPhoneNumber(false);
+
+      setEmailAlreadyExists(false);
+      setCinAlreadyExists(false);
+      setPhoneNumberAlreadyExists(false);
 
       if(email === "")
       {
@@ -122,12 +130,23 @@ export function Signup()
       }
       catch (err)
       {
-        console.log(err.response.data);
-        setEmailAlreadyExists(true);
-        // if(err.response.data.message === "Email already exists")
-        // {
-        //   setEmailAlreadyExists(true);
-        // }
+        console.log(err);
+        if(err.response.data.message === "Email already exists" || err.response.data.statusCode === 409)
+        {
+          setEmailAlreadyExists(true);
+        }
+        if(err.response.status === 400)
+        {
+          setInvalidEmail(true);
+        }
+        if(err.response.data.message === "The CIN you entered is already associated with an existing account")
+        {
+          setCinAlreadyExists(true);
+        }
+        if(err.response.data.message === "The phone number you entered is already registered. Please use a different phone number or log in with the existing one")
+        {
+          setPhoneNumberAlreadyExists(true);
+        }
       }
     }, [email, password, firstname, lastname, cin, phoneNumber, navigate, setCookies]);
 
@@ -145,7 +164,7 @@ export function Signup()
       variant="outlined"
       sx={{
         maxHeight: 'max-content',
-        maxWidth: '25rem',
+        maxWidth: '26.07rem',
         mx: 'auto',
         marginTop: '5rem'
       }}
@@ -172,19 +191,22 @@ export function Signup()
                 <FormHelperText sx={{display: emptyLastname ? "inline" : "none", color: "#c71c1c", marginLeft: "0.7rem"}}>This field is required</FormHelperText>
             </FormControl>
             <FormControl>
-                <FormLabel>ID number / CIN</FormLabel>
-                <Input color={emptyCin ? "danger" : "neutral"} onChange={(event) => setCin(event.target.value)} type="tel" placeholder="Enter your ID number" required />
-                <FormHelperText sx={{display: emptyCin ? "inline" : "none", color: "#c71c1c", marginLeft: "0.7rem"}}>{invalidCin ? "Invalid ID number": "This field is required"}</FormHelperText>
+                <FormLabel>CIN</FormLabel>
+                <Input color={emptyCin || cinAlreadyExists ? "danger" : "neutral"} onChange={(event) => setCin(event.target.value)} type="tel" placeholder="Enter your ID number" required />
+                <FormHelperText sx={{display: emptyCin ? "inline" : "none", color: "#c71c1c", marginLeft: "0.7rem"}}>{invalidCin ? "Invalid CIN": "This field is required"}</FormHelperText>
+                <FormHelperText sx={{display: cinAlreadyExists ? "inline" : "none", color: "#c71c1c", marginLeft: "0.7rem"}}>CIN already exists</FormHelperText>
             </FormControl>
             <FormControl>
                 <FormLabel>Phone number</FormLabel>
-                <Input color={emptyPhoneNumber ? "danger" : "neutral"} onChange={(event) => setPhoneNumber(event.target.value)} type='tel' placeholder="Enter your Phone number" required />
+                <Input color={emptyPhoneNumber || phoneNumberAlreadyExists ? "danger" : "neutral"} onChange={(event) => setPhoneNumber(event.target.value)} type='tel' placeholder="Enter your Phone number" required />
                 <FormHelperText sx={{display: emptyPhoneNumber ? "inline" : "none", color: "#c71c1c", marginLeft: "0.7rem"}}>{invalidPhoneNumber ? "Invalid phone number": "This field is required"}</FormHelperText>
+                <FormHelperText sx={{display: phoneNumberAlreadyExists ? "inline" : "none", color: "#c71c1c", marginLeft: "0.7rem"}}>Phone number already exists</FormHelperText>
             </FormControl>
             <FormControl sx={{ gridColumn: '1/-1' }}>
                 <FormLabel>Email</FormLabel>
-                <Input color={emailAlreadyExists || emptyEmail ? "danger" : "neutral"} onChange={(event) => setEmail(event.target.value)} endDecorator={<EmailOutlinedIcon sx={{color: emailAlreadyExists || emptyEmail ? "#c71c1c" : "neutral"}} />}  type='email' placeholder="Enter your email" required />
+                <Input color={emailAlreadyExists || emptyEmail || invalidEmail ? "danger" : "neutral"} onChange={(event) => setEmail(event.target.value)} endDecorator={<EmailOutlinedIcon sx={{color: emailAlreadyExists || emptyEmail || invalidEmail ? "#c71c1c" : "neutral"}} />}  type='email' placeholder="Enter your email" required />
                 <FormHelperText sx={{display: emailAlreadyExists || emptyEmail ? "inline" : "none", color: "#c71c1c", marginLeft: "0.7rem"}}>{emailAlreadyExists ? "Email already exists.": "This field is required"}</FormHelperText>
+                <FormHelperText sx={{display: invalidEmail ? "inline" : "none", color: "#c71c1c", marginLeft: "0.7rem"}}>Entered email is invalid.</FormHelperText>
             </FormControl>
             <FormControl sx={{ gridColumn: '1/-1' }}>
                 <FormLabel>Password</FormLabel>

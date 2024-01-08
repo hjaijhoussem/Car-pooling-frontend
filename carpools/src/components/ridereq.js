@@ -94,6 +94,7 @@ export function RideReq(props)
                         </Step>
                     </Stepper>
                     <Typography startDecorator = {<AirlineSeatReclineNormalIcon />} sx={{marginTop: "0.7rem"}}>{props.available_seats} {props.available_seats === 1 ? "seat" : "seats"} available</Typography>
+                    {/* add the status */}
                 </CardContent>
                 <CardActions sx={{margin: "0rem", padding: "0rem"}}>
                     <Button variant="solid" sx={{maxWidth: '8.7rem', margin: '0rem auto 0rem auto', backgroundColor: '#EA4D4E', "&:hover": {backgroundColor: '#E83F3F'}}} onClick={cancel}>

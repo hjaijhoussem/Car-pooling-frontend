@@ -25,6 +25,7 @@ export function Login()
   const [password, setPassword] = useState("");
 
   const [wrongEmail, setWrongEmail] = useState(false);
+  const [invalidEmail, setInvalidEmail] = useState(false);
   const [wrongPassword, setWrongPassword] = useState(false);
 
   const [emptyEmail, setEmptyEmail] = useState(false);
@@ -40,6 +41,8 @@ export function Login()
 
       setWrongEmail(false);
       setWrongPassword(false);
+
+      setInvalidEmail(false);
 
       setEmptyEmail(false);
       setEmptyPassword(false);
@@ -89,6 +92,11 @@ export function Login()
         {
           setWrongPassword(true);
         }
+        if(err.response.status === 400)
+        {
+          setInvalidEmail(true);
+        }
+        console.log(err);
       }
     }, [email, password, navigate, setCookies]);
 
@@ -97,7 +105,7 @@ export function Login()
       {
         navigate("/");
       }
-    },[])
+    },[cookies.token, navigate])
 
     useEffect(() => {
       const keyDownHandler = event => {
@@ -139,8 +147,9 @@ export function Login()
         >
           <FormControl sx={{ gridColumn: '1/-1' }}>
             <FormLabel>Email</FormLabel>
-            <Input color={wrongEmail || emptyEmail ? "danger" : "neutral"} endDecorator={<EmailOutlinedIcon sx={{color: wrongEmail || emptyEmail ? "#c71c1c" : "neutral"}} />}  type='email' onChange={(event) => setEmail(event.target.value)} placeholder="Enter your email" required />
+            <Input color={wrongEmail || emptyEmail || invalidEmail ? "danger" : "neutral"} endDecorator={<EmailOutlinedIcon sx={{color: wrongEmail || emptyEmail || invalidEmail ? "#c71c1c" : "neutral"}} />}  type='email' onChange={(event) => setEmail(event.target.value)} placeholder="Enter your email" required />
             <FormHelperText sx={{display: wrongEmail || emptyEmail ? "inline" : "none", color: "#c71c1c", marginLeft: "0.7rem"}}>{wrongEmail ? "Email doesn't exist.": "This field is required"}</FormHelperText>
+            <FormHelperText sx={{display: invalidEmail ? "inline" : "none", color: "#c71c1c", marginLeft: "0.7rem"}}>Entered email is invalid.</FormHelperText>
           </FormControl>
           <FormControl sx={{ gridColumn: '1/-1' }}>
             <FormLabel>Password</FormLabel>
