@@ -9,6 +9,9 @@ import StarBorderIcon from '@mui/icons-material/StarBorder';
 import AirlineSeatReclineNormalIcon from '@mui/icons-material/AirlineSeatReclineNormal';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import PendingIcon from '@mui/icons-material/Pending';
+import DoDisturbIcon from '@mui/icons-material/DoDisturb';
 import { Button, CardActions, CardContent, Grid, Snackbar } from "@mui/joy";
 import data from "../data.json";
 import axios from "axios";
@@ -94,7 +97,9 @@ export function RideReq(props)
                         </Step>
                     </Stepper>
                     <Typography startDecorator = {<AirlineSeatReclineNormalIcon />} sx={{marginTop: "0.7rem"}}>{props.available_seats} {props.available_seats === 1 ? "seat" : "seats"} available</Typography>
-                    {/* add the status */}
+                    <Typography startDecorator = {<CheckCircleIcon color="success" sx={{fontSize: "1.3rem"}} />} color="success" sx={{display: props.status === "ACCEPTED" ? "inline" : "none", mt: "0.5rem"}}>Request accepted</Typography>
+                    <Typography startDecorator = {<PendingIcon sx={{color: "#EBB02D", fontSize: "1.3rem"}} />} sx={{display: props.status === "PENDING" ? "inline" : "none", color: "#EBB02D", mt: "0.5rem"}}>Waiting for approval</Typography>
+                    <Typography startDecorator = {<DoDisturbIcon sx={{color: "#c71c1c", fontSize: "1.25rem"}} />} color="danger" sx={{display: props.status === "REFUSED" ? "inline" : "none", mt: "0.5rem"}}>Request refused</Typography>
                 </CardContent>
                 <CardActions sx={{margin: "0rem", padding: "0rem"}}>
                     <Button variant="solid" sx={{maxWidth: '8.7rem', margin: '0rem auto 0rem auto', backgroundColor: '#EA4D4E', "&:hover": {backgroundColor: '#E83F3F'}}} onClick={cancel}>

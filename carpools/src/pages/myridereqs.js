@@ -77,6 +77,7 @@ export default function MyRideReqs()
                                         departure_region = {req.ride.departureRegion}
                                         destination_city = {req.ride.destinationCity}
                                         destination_region = {req.ride.destinationRegion}
+                                        status = {req.status}
                                         review = {4.7}
                                         getReqs = {getReqs}
                                     />
