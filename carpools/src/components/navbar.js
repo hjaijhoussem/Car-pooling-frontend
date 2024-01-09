@@ -57,7 +57,7 @@ export function Navbar()
                                     <Menu sx={{minWidth: "12.3rem", backgroundColor: "#EFEFFF"}}>
                                         <MenuItem>Profile</MenuItem>
                                         <ListDivider />
-                                        <MenuItem>Rides</MenuItem>
+                                        <MenuItem onClick={() => navigate("/myrides")}>Rides</MenuItem>
                                         <MenuItem onClick={() => navigate("/myridereqs")}>Ride requests</MenuItem>
                                         <ListDivider />
                                         <MenuItem onClick={logout}>Logout</MenuItem>

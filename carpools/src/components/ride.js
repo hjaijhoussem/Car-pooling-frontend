@@ -9,16 +9,13 @@ import StarBorderIcon from '@mui/icons-material/StarBorder';
 import AirlineSeatReclineNormalIcon from '@mui/icons-material/AirlineSeatReclineNormal';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import PendingIcon from '@mui/icons-material/Pending';
-import DoDisturbIcon from '@mui/icons-material/DoDisturb';
 import { Button, CardActions, CardContent, Grid, Snackbar } from "@mui/joy";
 import data from "../data.json";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 
-export function RideReq(props)
+export function Ride(props)
 {
     const timestamp = new Date("2001-09-20T" + props.departure_time);
     const departure_time = timestamp.toLocaleTimeString();
@@ -26,42 +23,43 @@ export function RideReq(props)
     const[cookies] = useCookies(["token"]);
 
     const [success, setSuccess] = useState(false);
+    const [alreadyRequested, setAlreadyRequested] = useState(false);
     const [error, setError] = useState(false);
 
     const navigate = useNavigate();
 
     async function cancel()
     {
-        if(!(cookies.token))
-        {
-            navigate("/login");
-            return;
-        }
-        console.log(props.req_id);
-        console.log(props.ride_id);
+        // if(!(cookies.token))
+        // {
+        //     navigate("/login");
+        //     return;
+        // }
+        // console.log(props.req_id);
+        // console.log(props.ride_id);
 
-        try
-        {
-            const response = await axios.delete(data.apiurl + `/api/v1/passenger/ride_requests/${props.ride_id}/${props.req_id}/cancel`,
-            {
-                headers: {
-                    Authorization: `Bearer ${cookies.token}`
-                }
-            });
+        // try
+        // {
+        //     const response = await axios.delete(data.apiurl + `/api/v1/passenger/ride_requests/${props.ride_id}/${props.req_id}/cancel`,
+        //     {
+        //         headers: {
+        //             Authorization: `Bearer ${cookies.token}`
+        //         }
+        //     });
 
-            console.log(response);
+        //     console.log(response);
 
-            if(response)
-            {
-                setSuccess(true);
-                props.getReqs();
-            }
-        }
-        catch (err)
-        {
-            console.log(err);
-            setError(true);
-        }
+        //     if(response)
+        //     {
+        //         setSuccess(true);
+        //         props.getReqs();
+        //     }
+        // }
+        // catch (err)
+        // {
+        //     console.log(err);
+        //     setError(true);
+        // }
     }
 
     return(
@@ -97,13 +95,16 @@ export function RideReq(props)
                         </Step>
                     </Stepper>
                     <Typography startDecorator = {<AirlineSeatReclineNormalIcon />} sx={{marginTop: "0.7rem"}}>{props.available_seats} {props.available_seats === 1 ? "seat" : "seats"} available</Typography>
-                    <Typography startDecorator = {<CheckCircleIcon color="success" sx={{fontSize: "1.3rem"}} />} color="success" sx={{display: props.status === "ACCEPTED" ? "inline" : "none", mt: "0.5rem"}}>Request accepted</Typography>
-                    <Typography startDecorator = {<PendingIcon sx={{color: "#EBB02D", fontSize: "1.3rem"}} />} sx={{display: props.status === "PENDING" ? "inline" : "none", color: "#EBB02D", mt: "0.5rem"}}>Waiting for approval</Typography>
-                    <Typography startDecorator = {<DoDisturbIcon sx={{color: "#c71c1c", fontSize: "1.25rem"}} />} color="danger" sx={{display: props.status === "REJECTED" ? "inline" : "none", mt: "0.5rem"}}>Request rejected</Typography>
                 </CardContent>
                 <CardActions sx={{margin: "0rem", padding: "0rem"}}>
-                    <Button variant="solid" sx={{maxWidth: '8.7rem', margin: '0rem auto 0rem auto', backgroundColor: '#EA4D4E', "&:hover": {backgroundColor: '#E83F3F'}}} onClick={cancel}>
-                        Cancel request
+                    <Button variant="solid" sx={{minWidth: "8rem", maxWidth: '8.7rem', margin: '0rem auto 0rem auto', backgroundColor: '#00A9FF', "&:hover": {backgroundColor: '#0099FF'}}} onClick={() => navigate(`/checkreqs/${props.ride_id}`)}>
+                        Check requests
+                    </Button>
+                    <Button variant="solid" sx={{minWidth: "8rem", maxWidth: '8.7rem', margin: '0rem auto 0rem auto', backgroundColor: '#FF9843', "&:hover": {backgroundColor: '#EE9843'}}} onClick={cancel}>
+                        Edit ride
+                    </Button>
+                    <Button variant="solid" sx={{minWidth: "8rem", maxWidth: '8.7rem', margin: '0rem auto 0rem auto', backgroundColor: '#EA4D4E', "&:hover": {backgroundColor: '#E83F3F'}}} onClick={cancel}>
+                        Cancel ride
                     </Button>
                 </CardActions>
             </Card>
@@ -120,7 +121,7 @@ export function RideReq(props)
                 setSuccess(false);
                 }}
             >
-                Canceled request to ride with success.
+                Ride canceled with success.
             </Snackbar>
             <Snackbar
                 sx={{backgroundColor: "#FFDFDF"}}
@@ -135,7 +136,7 @@ export function RideReq(props)
                 setError(false);
                 }}
             >
-                An error occured when canceling request to ride.
+                An error occured when canceling ride.
             </Snackbar>
         </>
     )
