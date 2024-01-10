@@ -19,6 +19,7 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import data from "../data.json";
 import { Footer } from "../components/footer";
 import { NavLink } from "react-router-dom";
+import { Navbar } from '../components/navbar';
 
 export function Home()
 {
@@ -69,6 +70,7 @@ export function Home()
 
     return(
         <>
+            <Navbar />
             <Box sx={{backgroundImage: `url(${carsbanner})`,
                 height: "15rem",
                 backgroundPosition: "center",

@@ -1,6 +1,5 @@
 import './App.css';
 import { Route, Routes } from 'react-router-dom';
-import { Navbar } from './components/navbar';
 import { Home } from './pages/home';
 import { Offerride } from './pages/offerride';
 import { Search } from './pages/search';
@@ -14,7 +13,6 @@ import { EditRide } from './pages/editride';
 function App() {
   return (
     <>
-      <Navbar />
       <Routes>
         <Route path = '/' element = {<Home />} />
         <Route path = '/offerride' element = {<Offerride />} />

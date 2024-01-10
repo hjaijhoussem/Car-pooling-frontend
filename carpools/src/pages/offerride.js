@@ -20,6 +20,7 @@ import data from "../data.json";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { Navbar } from '../components/navbar';
 
 export function Offerride()
 {
@@ -121,6 +122,7 @@ export function Offerride()
 
     return (
         <>
+            <Navbar />
             <Card
             variant="outlined"
             sx={{

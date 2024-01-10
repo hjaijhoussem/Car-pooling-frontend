@@ -20,6 +20,7 @@ import data from "../data.json";
 import { useCookies } from "react-cookie";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { Navbar } from '../components/navbar';
 
 export function EditRide()
 {
@@ -153,6 +154,7 @@ export function EditRide()
 
     return (
         <>
+            <Navbar />
             <Card
             variant="outlined"
             sx={{

@@ -17,6 +17,7 @@ import { useParams } from "react-router-dom";
 import { RideCard } from "../components/ridecard";
 import { Pagination } from "../components/pagination";
 import axios from "axios";
+import { Navbar } from '../components/navbar';
 
 export function Search()
 {
@@ -106,6 +107,7 @@ export function Search()
 
     return(
         <>
+            <Navbar />
             <Card
             variant="outlined"
             sx={{

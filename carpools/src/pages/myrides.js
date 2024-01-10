@@ -6,6 +6,7 @@ import { Pagination } from "../components/pagination";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import { Ride } from "../components/ride";
+import { Navbar } from '../components/navbar';
 
 export function MyRides()
 {
@@ -51,6 +52,7 @@ export function MyRides()
 
     return(
         <>
+            <Navbar />
             <Stack direction={"row"} justifyContent={"center"} sx={{mt: "3rem"}}>
                 <Typography level = "h1" sx={{color: "#232323"}}>
                     Rides offered

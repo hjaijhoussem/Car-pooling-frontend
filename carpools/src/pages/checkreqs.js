@@ -7,6 +7,7 @@ import { useCookies } from 'react-cookie';
 import { useNavigate, useParams } from 'react-router-dom';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import { Navbar } from '../components/navbar';
 
 export function CheckReqs()
 {
@@ -45,7 +46,7 @@ export function CheckReqs()
         {
             console.log(err);
         }
-    },[cookies.token]);
+    },[cookies.token, params.rideid]);
 
     async function accept(req_id)
     {
@@ -110,6 +111,7 @@ export function CheckReqs()
 
     return (
         <>
+            <Navbar />
             <Stack direction={"row"} justifyContent={"center"} sx={{mt: "3rem"}}>
                 <Typography level = "h1" sx={{color: "#232323"}}>
                     Ride requests

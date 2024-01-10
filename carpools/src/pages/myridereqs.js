@@ -6,6 +6,7 @@ import { Pagination } from '../components/pagination';
 import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
 import { RideReq } from '../components/ridereq';
+import { Navbar } from '../components/navbar';
 
 export default function MyRideReqs()
 {
@@ -51,6 +52,7 @@ export default function MyRideReqs()
 
     return (
         <>
+            <Navbar />
             <Stack direction={"row"} justifyContent={"center"} sx={{mt: "3rem"}}>
                 <Typography level = "h1" sx={{color: "#232323"}}>
                     Ride requests
