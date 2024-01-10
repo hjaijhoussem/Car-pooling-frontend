@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Card from '@mui/joy/Card';
 import CardActions from '@mui/joy/CardActions';
 import CardContent from '@mui/joy/CardContent';
@@ -15,19 +15,22 @@ import LocationSearchingIcon from '@mui/icons-material/LocationSearching';
 import PersonIcon from '@mui/icons-material/Person';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import { FormHelperText, Option, Select, Snackbar } from '@mui/joy';
+import { Option, Select, Snackbar } from '@mui/joy';
 import data from "../data.json";
 import { useCookies } from "react-cookie";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
-export function Offerride()
+export function EditRide()
 {
+
+    const params = useParams();
+
     const [departure, setDeparture] = useState("");
     const [arrival, setArrival] = useState("");
     const [date, setDate] = useState("");
     const [time, setTime] = useState("");
-    const [passengersnb, setPassengersnb] = useState(1);
+    const [passengersnb, setPassengersnb] = useState("1");
     const [price, setPrice] = useState("");
 
     const [depInvalid, setDepInvalid ] = useState(false);
@@ -82,7 +85,7 @@ export function Offerride()
         }
         try
         {
-            const response = await axios.post(data.apiurl + "/api/v1/user/rides",
+            const response = await axios.put(data.apiurl + `/api/v1/user/rides/${params.rideid}`,
             {
                 availableSeats: passengersnb,
                 pricePerSeat: price,
@@ -108,16 +111,45 @@ export function Offerride()
         catch (err)
         {
             console.log(err);
+            if(err.response.data.departureDate === "must be a future date")
+            {
+                setDateInvalid(true);
+            }
             setError(true);
         }
     }
+
+    const getRide = useCallback(async () => {
+        try
+        {
+            var response = await axios.get(data.apiurl + `/api/v1/user/rides/${params.rideid}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${cookies.token}`
+                }
+            });
+            console.log(response);
+            setDeparture(response.data.departureRegion);
+            setArrival(response.data.destinationRegion);
+            setDate(response.data.departureDate.slice(0, 10));
+            setTime(response.data.departureDate.slice(11, 16));
+            setPassengersnb(response.data.availableSeats.toString());
+            setPrice(response.data.pricePerSeat.toString());
+        }
+        catch (err)
+        {
+            console.log(err);
+        }
+    },[cookies.token, params.rideid]);
 
     useEffect(() => {
         if(!(cookies.token))
         {
             navigate("/login");
+            return;
         }
-    })
+        getRide();
+    }, [cookies.token, navigate, getRide]);
 
     return (
         <>
@@ -143,23 +175,23 @@ export function Offerride()
                 >
                     <FormControl sx={{ gridColumn: '1/-1' }}>
                         <FormLabel>Departure</FormLabel>
-                        <Autocomplete color={depInvalid ? "danger" : "neutral"} size="md" options={data.locations} startDecorator={<LocationSearchingIcon sx={depInvalid ? { color: "#d86d6e" } : {}} />} placeholder="Leaving from" onChange={(event, newValue) => setDeparture(newValue)} required />
+                        <Autocomplete color={depInvalid ? "danger" : "neutral"} size="md" options={data.locations} value={departure === "" ? "Sousse" : departure} startDecorator={<LocationSearchingIcon sx={depInvalid ? { color: "#d86d6e" } : {}} />} placeholder="Leaving from" onChange={(event, newValue) => setDeparture(newValue)} required />
                     </FormControl>
                     <FormControl sx={{ gridColumn: '1/-1' }}>
                         <FormLabel>Destination</FormLabel>
-                        <Autocomplete color={arrivalInvalid ? "danger" : "neutral"} size="md" options={data.locations} startDecorator={<LocationSearchingIcon sx={arrivalInvalid ? { color: "#d86d6e" } : {}} />} placeholder="Going to" onChange={(event, newValue) => setArrival(newValue)} required />
+                        <Autocomplete color={arrivalInvalid ? "danger" : "neutral"} size="md" options={data.locations} value={arrival === "" ? "Sousse" : arrival} startDecorator={<LocationSearchingIcon sx={arrivalInvalid ? { color: "#d86d6e" } : {}} />} placeholder="Going to" onChange={(event, newValue) => setArrival(newValue)} required />
                     </FormControl>
                     <FormControl>
                         <FormLabel>Dep. Date</FormLabel>
-                        <Input color={dateInvalid ? "danger" : "neutral"} size="md" type="date" onChange={(event) => setDate(event.target.value)} required />
+                        <Input color={dateInvalid ? "danger" : "neutral"} size="md" type="date" value={date === "" ? "" : date} onChange={(event) => setDate(event.target.value)} required />
                     </FormControl>
                     <FormControl>
                         <FormLabel>Dep. Time</FormLabel>
-                        <Input color={timeInvalid ? "danger" : "neutral"} onChange={(event) => setTime(event.target.value)} size="md" type="time" required />
+                        <Input color={timeInvalid ? "danger" : "neutral"} value={time === "" ? "" : time} onChange={(event) => setTime(event.target.value)} size="md" type="time" required />
                     </FormControl>
                     <FormControl>
                         <FormLabel>Number of passengers</FormLabel>
-                        <Select size="md" startDecorator={<PersonIcon />} defaultValue="1" onChange={handleChange}>
+                        <Select size="md" startDecorator={<PersonIcon />} value={passengersnb} onChange={handleChange}>
                             <Option value="1">1 passenger</Option>
                             <Option value="2">2 passengers</Option>
                             <Option value="3">3 passengers</Option>
@@ -172,19 +204,16 @@ export function Offerride()
                     </FormControl>
                     <FormControl>
                         <FormLabel>Price for a seat</FormLabel>
-                        <Input color={priceInvalid ? "danger" : "neutral"} startDecorator={<AttachMoneyIcon />} onChange={(event) => setPrice(event.target.value)} type='number' defaultValue={""} placeholder="Price per seat" required />
+                        <Input color={priceInvalid ? "danger" : "neutral"} startDecorator={<AttachMoneyIcon />} onChange={(event) => setPrice(event.target.value)} type='number' value={price} placeholder="Price per seat" required />
                     </FormControl>
                     <Divider inset="none" sx={{ gridColumn: '1/-1', marginTop: "0.3rem" }} />
                     <CardActions sx={{ gridColumn: '1/-1', padding: "0rem" }}>
-                        <Button variant="solid" sx={{maxWidth: '7rem', margin: 'auto', backgroundColor: '#00A9FF', "&:hover": {backgroundColor: '#0099FF'}}} onClick={handleSubmit}>
-                            Offer ride
+                        <Button variant="solid" sx={{maxWidth: '10rem', margin: 'auto', backgroundColor: '#00A9FF', "&:hover": {backgroundColor: '#0099FF'}}} onClick={handleSubmit}>
+                            Save changes
                         </Button>
                     </CardActions>
                 </CardContent>
             </Card>
-            <FormControl>
-                <FormHelperText sx={{margin: "auto", padding: "1rem"}}>More details about you will be added automatically</FormHelperText>
-            </FormControl>
             <Snackbar
                 sx={{backgroundColor: "#CDEFCF"}}
                 autoHideDuration={3000}
@@ -198,7 +227,7 @@ export function Offerride()
                 setSuccess(false);
                 }}
             >
-                Ride offered with success.
+                Changes saved with success.
             </Snackbar>
             <Snackbar
                 sx={{backgroundColor: "#FFDFDF"}}
@@ -213,7 +242,7 @@ export function Offerride()
                 setError(false);
                 }}
             >
-                An error occured when offering ride.
+                An error occured when saving changes.
             </Snackbar>
         </>
     );

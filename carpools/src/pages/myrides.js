@@ -38,7 +38,7 @@ export function MyRides()
         {
             console.log(err);
         }
-    },[cookies.token])
+    },[cookies.token]);
 
     useEffect(() => {
         if(!(cookies.token))

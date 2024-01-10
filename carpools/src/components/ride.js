@@ -100,7 +100,7 @@ export function Ride(props)
                     <Button variant="solid" sx={{minWidth: "8rem", maxWidth: '8.7rem', margin: '0rem auto 0rem auto', backgroundColor: '#00A9FF', "&:hover": {backgroundColor: '#0099FF'}}} onClick={() => navigate(`/checkreqs/${props.ride_id}`)}>
                         Check requests
                     </Button>
-                    <Button variant="solid" sx={{minWidth: "8rem", maxWidth: '8.7rem', margin: '0rem auto 0rem auto', backgroundColor: '#FF9843', "&:hover": {backgroundColor: '#EE9843'}}} onClick={cancel}>
+                    <Button variant="solid" sx={{minWidth: "8rem", maxWidth: '8.7rem', margin: '0rem auto 0rem auto', backgroundColor: '#FF9843', "&:hover": {backgroundColor: '#EE9843'}}} onClick={() => navigate(`/editride/${props.ride_id}`)}>
                         Edit ride
                     </Button>
                     <Button variant="solid" sx={{minWidth: "8rem", maxWidth: '8.7rem', margin: '0rem auto 0rem auto', backgroundColor: '#EA4D4E', "&:hover": {backgroundColor: '#E83F3F'}}} onClick={cancel}>

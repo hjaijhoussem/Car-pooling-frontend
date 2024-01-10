@@ -9,6 +9,7 @@ import { Signup } from './pages/signup';
 import MyRideReqs from './pages/myridereqs';
 import { MyRides } from './pages/myrides';
 import { CheckReqs } from './pages/checkreqs';
+import { EditRide } from './pages/editride';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path = '/myridereqs' element = {<MyRideReqs />} />
         <Route path = '/myrides' element = {<MyRides />} />
         <Route path = '/checkreqs/:rideid' element = {<CheckReqs />} />
+        <Route path = '/editride/:rideid' element = {<EditRide />} />
         <Route path = '/login' element = {<Login />} />
         <Route path = '/signup' element = {<Signup />} />
       </Routes>
