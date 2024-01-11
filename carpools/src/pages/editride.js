@@ -10,7 +10,7 @@ import Autocomplete from '@mui/joy/Autocomplete';
 import Typography from '@mui/joy/Typography';
 import Button from '@mui/joy/Button';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
-import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
 import LocationSearchingIcon from '@mui/icons-material/LocationSearching';
 import PersonIcon from '@mui/icons-material/Person';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
@@ -164,8 +164,8 @@ export function EditRide()
                 marginTop: '3.1rem'
             }}
             >
-                <Typography sx={{margin: 'auto'}} level="title-lg" startDecorator={<AddIcon />}>
-                    Offer ride
+                <Typography sx={{margin: 'auto'}} level="title-lg" startDecorator={<EditIcon />}>
+                    Edit ride
                 </Typography>
                 <Divider inset="none" />
                 <CardContent
