@@ -26,7 +26,7 @@ export function MyRides()
     const getRides = useCallback(async () => {
         try
         {
-            var response = await axios.get(data.apiurl + `/api/v1/user/rides?driverId=${19}`,
+            var response = await axios.get(data.apiurl + `/api/v1/user/rides`,
             {
                 headers: {
                     Authorization: `Bearer ${cookies.token}`

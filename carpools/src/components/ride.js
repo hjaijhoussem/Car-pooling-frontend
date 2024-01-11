@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Card from "@mui/joy/Card";
 import Stepper from '@mui/joy/Stepper';
 import Step from '@mui/joy/Step';
@@ -25,6 +25,9 @@ export function Ride(props)
     const [success, setSuccess] = useState(false);
     const [alreadyRequested, setAlreadyRequested] = useState(false);
     const [error, setError] = useState(false);
+
+    const [reviews, setReviews] = useState([]);
+    const [review, setReview] = useState(0);
 
     const navigate = useNavigate();
 
@@ -62,6 +65,48 @@ export function Ride(props)
         // }
     }
 
+    const getReviews = useCallback(async () => {
+        try
+        {
+            var response = await axios.get(data.apiurl + `/api/v1/user/ride/${props.ride_id}/reviews`,
+            {
+                headers: {
+                    Authorization: `Bearer ${cookies.token}`
+                }
+            });
+            console.log(response);
+            setReviews(response.data);
+        }
+        catch (err)
+        {
+            console.log(err);
+        }
+    },[cookies.token, props.ride_id])
+
+    useEffect(() => {
+        if(!(cookies.token))
+        {
+            navigate("/login");
+            return;
+        }
+        getReviews();
+    }, [cookies.token, navigate, getReviews]);
+
+    useEffect(() => {
+        if(reviews.length === 0)
+        {
+            return;
+        }
+
+        let sum = 0;
+        reviews.forEach( rev => {
+        sum += rev.stars;
+        });
+
+        setReview(sum / reviews.length);
+
+    }, [reviews]);
+
     return(
         <>
             <Card sx={{paddingTop: "0.77rem", paddingBottom: "0.5rem", width: "33rem"}}>
@@ -69,7 +114,7 @@ export function Ride(props)
                     <Grid xs={8}>
                         <div>
                             <Typography level="body-lg" startDecorator = {<PersonIcon />}>{props.driver_id}</Typography>
-                            <Typography level="body-sm" startDecorator = {<StarBorderIcon sx={{fontSize: "1rem"}} />} sx={{marginLeft: "2rem"}}>{props.review}</Typography>
+                            <Typography level="body-sm" startDecorator = {<StarBorderIcon sx={{fontSize: "1rem"}} />} sx={{marginLeft: "2rem"}}>{(Math.round(review * 10) / 10).toString()}</Typography>
                         </div>
                     </Grid>
                     <Grid xs={8}>

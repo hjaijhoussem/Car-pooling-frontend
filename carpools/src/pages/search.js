@@ -88,7 +88,7 @@ export function Search()
 
         try
         {
-            var response = await axios.get(data.apiurl + `/api/v1/user/rides?departureDate=${date}&availableSeats=${passengersnb}&departureRegion=${departure.toUpperCase()}&destinationRegion=${arrival.toUpperCase()}`);
+            var response = await axios.get(data.apiurl + `/api/v1/user/rides/all?departureDate=${date}&availableSeats=${passengersnb}&departureRegion=${departure.toUpperCase()}&destinationRegion=${arrival.toUpperCase()}`);
             console.log(response);
             setRides(response.data);
         }
