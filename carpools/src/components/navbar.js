@@ -55,7 +55,7 @@ export function Navbar()
                                         </Typography>
                                     </MenuButton>
                                     <Menu sx={{minWidth: "12.3rem", backgroundColor: "#EFEFFF"}}>
-                                        <MenuItem>Profile</MenuItem>
+                                        <MenuItem onClick={() => navigate("/profile")}>Profile</MenuItem>
                                         <ListDivider />
                                         <MenuItem onClick={() => navigate("/myrides")}>Rides</MenuItem>
                                         <MenuItem onClick={() => navigate("/myridereqs")}>Ride requests</MenuItem>
