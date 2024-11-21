@@ -18,9 +18,6 @@ pipeline {
         }
 
         stage('Quality Analysis'){
-            environment {
-                SCANNER_HOME = tool 'sonarqube' 
-           }
             steps{
                 withSonarQubeEnv('mysonar'){
                    sh """
