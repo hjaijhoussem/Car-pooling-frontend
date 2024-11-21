@@ -1,6 +1,8 @@
 pipeline {
     agent any
-
+    tools {
+        maven '3.9.5'
+    }
     environment {
         NEXUS_CREDENTIAL_ID = "nexus"
         NEXUS_URL = 'http://localhost:6666'
