@@ -1,1 +1,64 @@
+pipeline {
+    agent any
 
+    environment {
+        IMAGE_NAME= 'react-app'
+    }
+
+    stages {
+        stage("checkout code"){
+            steps {
+                script {
+                    git branch: 'main', url: 'https://github.com/hjaijhoussem/jenkins.git',  credentialsId: 'gh_usr_pwd'
+                }
+            }
+        }
+
+        stage('scan'){
+            environment {
+                SCANNER_HOME = tool 'sonarqube' 
+           }
+            steps{
+                withSonarQubeEnv(installationName: 'sonarqube') {
+                     sh '"${SCANNER_HOME}"/bin/sonar-scanner \
+                         -Dsonar.projectKey=react-app \
+                         -Dsonar.projectName="React App" \
+                         -Dsonar.sources=. \
+                         -Dsonar.host.url=http://192.168.1.121:9000'
+                }
+            }
+        }
+
+        stage('Quality Gate'){
+            steps{
+                waitForQualityGate abortPipeline: true
+            }
+        }
+
+        stage("build image"){
+            steps{
+                script{
+                    docker.build("${IMAGE_NAME}:${env.BUILD_NUMBER}")
+                }
+            }
+        }
+
+        stage("push to nexus"){
+            environment {
+                // NEXUS_VERSION = "nexus3"
+                // NEXUS_PROTOCOL = "http"
+                // NEXUS_REPOSITORY = "react-repo"
+                NEXUS_URL = "http://192.168.1.121:8081/repository/react-repo/" 
+                NEXUS_CREDENTIAL_ID = "jn_nexus_creds"
+            }
+            steps{
+                script{
+                    withDockerRegistry([url: "${NEXUS_URL}", credentialsId: "${NEXUS_CREDENTIAL_ID}"]) {
+                        docker.image("${IMAGE_NAME}:${env.BUILD_NUMBER}").push('latest')
+                        docker.image("${IMAGE_NAME}:${env.BUILD_NUMBER}").push("${env.BUILD_NUMBER}")
+                    }
+                } 
+            }
+        }
+    }
+}
