@@ -23,7 +23,7 @@ pipeline {
             steps{
                 withSonarQubeEnv('mysonar'){
                    sh """
-                    mvn sonar:sonar \
+                    npx sonar-scanner \
                         -Dsonar.projectKey=car-pooling-fe \
                         -Dsonar.projectName=car-pooling-fe \
                         -Dsonar.sources=. \
