@@ -17,7 +17,7 @@ pipeline {
             }
         }
 
-        stage('scan'){
+        stage('Quality Analysis'){
             environment {
                 SCANNER_HOME = tool 'sonarqube' 
            }
