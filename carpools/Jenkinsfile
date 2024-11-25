@@ -63,6 +63,12 @@ pipeline {
             }
         }
         stage('Deploy') {
+            agent {
+                docker {
+                    image 'ansible/ansible-runner:latest'
+                    args '-v $PWD:/ansible'
+                }
+            }
             environment {
                 FRONTEND_IMAGE = "${DOCKER_IMAGE_NAME}"
             }
@@ -75,8 +81,8 @@ pipeline {
                           description: 'Do you want to deploy the new image?'
                       )
                   ]
-                sh 'docker compose -f ./carpools/docker-compose.yaml up -d'
-
+                //sh 'docker compose -f ./carpools/docker-compose.yaml up -d'
+                sh 'ansible-playbook /ansible/carpools/deployment/site.yml -e image_name=${FRONTEND_IMAGE}'
             }
         }
     }

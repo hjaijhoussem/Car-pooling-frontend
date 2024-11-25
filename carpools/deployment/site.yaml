@@ -1,0 +1,21 @@
+---
+- name: Deploy Docker Containers
+  hosts: local
+  become: yes
+  vars:
+    image_name: "{{ image_name }}"  # This variable will be override in jenkins pipeline
+
+  tasks:
+    - name: Pull the Docker image
+      docker_image:
+        name: "{{ image_name }}"
+        source: pull
+
+    - name: Start Docker container
+      docker_container:
+        name: car-pooling-fe
+        image: "{{ image_name }}"
+        state: started
+        #restart_policy: always
+        published_ports:
+          - "3000:80"
