@@ -65,7 +65,7 @@ pipeline {
         stage('Deploy') {
             agent {
                 docker {
-                    image 'ansible/ansible:ubuntu1404'
+                    image 'ansible/ansible:latest'
                     args '-v $PWD:/ansible'
                 }
             }
