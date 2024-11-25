@@ -1,0 +1,14 @@
+version: '3.3'
+services:
+
+  frontend:
+    image: ${FRONTEND_IMAGE} 
+    container_name: car-pooling-fe
+    ports:
+      - '3000:80'
+    networks:
+      - car-pooling
+
+networks:
+  car-pooling:
+    driver: bridge
