@@ -64,7 +64,7 @@ pipeline {
         }
         stage('Deploy') {
             environment {
-                BACKEND_IMAGE = "${DOCKER_IMAGE_NAME}"
+                FRONTEND_IMAGE = "${DOCKER_IMAGE_NAME}"
             }
             steps {
                 input message: 'Approve Deployment', 
