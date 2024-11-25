@@ -82,7 +82,7 @@ pipeline {
                       )
                   ]
                 //sh 'docker compose -f ./carpools/docker-compose.yaml up -d'
-                sh 'ansible-playbook /ansible/carpools/deployment/site.yml -e image_name=${FRONTEND_IMAGE}'
+                sh 'ansible-playbook /ansible/carpools/deployment/site.yaml -e image_name=${FRONTEND_IMAGE}'
             }
         }
     }
