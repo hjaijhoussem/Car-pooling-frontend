@@ -75,7 +75,7 @@ pipeline {
                           description: 'Do you want to deploy the new image?'
                       )
                   ]
-                sh 'docker compose -f ./carpools/docker-compose.yaml up -d
+                sh 'docker compose -f ./carpools/docker-compose.yaml up -d'
 
             }
         }
