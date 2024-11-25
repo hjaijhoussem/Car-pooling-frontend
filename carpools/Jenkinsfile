@@ -2,6 +2,7 @@ pipeline {
     agent any
     tools {
         maven '3.9.5'
+        nodejs 'nodejs-18'
     }
     environment {
         NEXUS_CREDENTIAL_ID = "nexus"
