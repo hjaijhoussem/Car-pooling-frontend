@@ -63,12 +63,12 @@ pipeline {
             }
         }
         stage('Deploy') {
-            agent {
-                docker {
-                    image 'litmuschaos/ansible-runner'
-                    args '-v $PWD:/ansible'
-                }
-            }
+            // agent {
+            //     docker {
+            //         image 'litmuschaos/ansible-runner'
+            //         args '-v $PWD:/ansible'
+            //     }
+            // }
             environment {
                 FRONTEND_IMAGE = "${DOCKER_IMAGE_NAME}"
             }
@@ -81,9 +81,9 @@ pipeline {
                           description: 'Do you want to deploy the new image?'
                       )
                   ]
-                //sh 'docker compose -f ./carpools/docker-compose.yaml up -d'
-                sh 'ls -R /ansible'
-                sh 'ansible-playbook /ansible/carpools/deployment/site.yaml -e image_name=${FRONTEND_IMAGE}'
+                sh 'docker compose -f ./carpools/docker-compose.yaml up -d'
+                // sh 'ls -R /ansible'
+                // sh 'ansible-playbook /ansible/carpools/deployment/site.yaml -e image_name=${FRONTEND_IMAGE}'
             }
         }
     }
