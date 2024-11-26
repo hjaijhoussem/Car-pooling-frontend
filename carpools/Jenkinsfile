@@ -20,6 +20,25 @@ pipeline {
             }
         }
 
+        stage('Parallel jobs') {
+            parallel {
+                stage('stage1') {
+                    steps {
+                        script {
+                            echo 'job from stage1'
+                        }
+                    }
+                }
+                stage('stage2') {
+                    steps {
+                        script {
+                            echo 'job from stage2'
+                        }
+                    }
+                }
+            }
+        }
+
         stage('Quality Analysis'){
             steps{
                 withSonarQubeEnv('mysonar'){
@@ -63,26 +82,27 @@ pipeline {
             }
         }
         stage('Deploy') {
-            agent {
-                docker {
-                    image 'ansible/ansible:latest'
-                    args '-v $PWD:/ansible'
-                }
-            }
+            // agent {
+            //     docker {
+            //         image 'litmuschaos/ansible-runner'
+            //         args '-v $PWD:/ansible'
+            //     }
+            // }
             environment {
                 FRONTEND_IMAGE = "${DOCKER_IMAGE_NAME}"
             }
             steps {
-                input message: 'Approve Deployment', 
+                input message: 'Approve Deployment',
                   parameters: [
                       choice(
-                          name: 'Proceed with deployment?', 
-                          choices: ['Yes', 'No'], 
+                          name: 'Proceed with deployment?',
+                          choices: ['Yes', 'No'],
                           description: 'Do you want to deploy the new image?'
                       )
                   ]
-                //sh 'docker compose -f ./carpools/docker-compose.yaml up -d'
-                sh 'ansible-playbook /ansible/carpools/deployment/site.yml -e image_name=${FRONTEND_IMAGE}'
+                sh 'docker compose -f ./carpools/docker-compose.yaml up -d'
+                // sh 'ls -R /ansible'
+                // sh 'ansible-playbook /ansible/carpools/deployment/site.yaml -e image_name=${FRONTEND_IMAGE}'
             }
         }
     }
