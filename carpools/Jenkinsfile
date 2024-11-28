@@ -101,6 +101,7 @@ pipeline {
                       )
                   ]
                 //sh 'docker compose -f ./carpools/docker-compose.yaml up -d'
+                sh 'echo local path: ${PWD}'
                 sh 'ls /ansible'
                 sh 'ansible-playbook /ansible/carpools/deployment/site.yaml -e image_name=${FRONTEND_IMAGE}'
             }
