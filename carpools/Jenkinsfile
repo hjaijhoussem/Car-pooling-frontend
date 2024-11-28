@@ -107,10 +107,10 @@ pipeline {
                 sh 'mkdir -p ~/.ssh'
                 sh 'echo "${SSH_KEY}" > ~/.ssh/id_rsa'
                 sh 'chmod 600 ~/.ssh/id_rsa'
-                sh 'echo pwd = ${PWD}'
-                // sh 'cp -r /var/jenkins_home/workspace/car-pooling-fe@2/* /ansible/'
                 sh 'cp -r ${PWD}/* /ansible/'
-                sh 'ansible-playbook -i /ansible/carpools/deployment/inventory.ini /ansible/carpools/deployment/site.yaml -e image_name=${FRONTEND_IMAGE}'
+                ansiColor('xterm') {
+                    sh 'ansible-playbook -i /ansible/carpools/deployment/inventory.ini /ansible/carpools/deployment/site.yaml -e image_name=${FRONTEND_IMAGE}'
+                }
                 // sh 'echo pwd = ${PWD}'
                 // sh 'ls'
                 // ansiColor('xterm') {
