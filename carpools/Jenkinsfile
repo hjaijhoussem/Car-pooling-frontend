@@ -108,9 +108,7 @@ pipeline {
                 sh 'echo "${SSH_KEY}" > ~/.ssh/id_rsa'
                 sh 'chmod 600 ~/.ssh/id_rsa'
                 sh 'cp -r ${PWD}/* /ansible/'
-                ansiColor('xterm') {
-                    sh 'ansible-playbook -i /ansible/carpools/deployment/inventory.ini /ansible/carpools/deployment/site.yaml -e image_name=${FRONTEND_IMAGE}'
-                }
+                sh 'ansible-playbook -i /ansible/carpools/deployment/inventory.ini /ansible/carpools/deployment/site.yaml -e image_name=${FRONTEND_IMAGE}'
                 // sh 'echo pwd = ${PWD}'
                 // sh 'ls'
                 // ansiColor('xterm') {
