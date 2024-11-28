@@ -3,7 +3,7 @@ pipeline {
     tools {
         maven '3.9.5'
         nodejs 'nodejs-18'
-        ansible 'ansible-home'
+        ansible 'ansible:latest'
     }
     environment {
         NEXUS_CREDENTIAL_ID = "nexus"
@@ -112,8 +112,8 @@ pipeline {
                 sh 'ls'
                 ansiColor('xterm') {
                     ansiblePlaybook(
-                        playbook: '/home/hippo/Bureau/houssemhj/Car-pooling-frontend/carpools/deployment/site.yaml',
-                        inventory: '/home/hippo/Bureau/houssemhj/Car-pooling-frontend/carpools/deployment/inventory.ini',
+                        playbook: './carpools/deployment/site.yaml',
+                        inventory: './carpools/deployment/inventory.ini',
                         credentialsId: 'ansible-ssh-key',
                         extraVars: [image_name: '${FRONTEND_IMAGE}'],
                         colorized: true)
