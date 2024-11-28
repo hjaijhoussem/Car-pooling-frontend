@@ -96,7 +96,7 @@ pipeline {
                 SSH_KEY = credentials('ansible-ssh-key')
             }
             steps {
-                input message: 'Approve Deployment',
+                input message: 'Approve Deployment'
                   // parameters: [
                   //     choice(
                   //         name: 'Proceed with deployment?',
