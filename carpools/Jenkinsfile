@@ -103,6 +103,7 @@ pipeline {
                 //sh 'chmod 600 ~/.ssh/id_rsa'
                 // sh 'cp -r ${PWD}/* /ansible/'
                 // sh 'ansible-playbook -i /ansible/carpools/deployment/inventory.ini /ansible/carpools/deployment/site.yaml -e image_name=${FRONTEND_IMAGE} -e network_name={NETWORK_NAME}'
+                sh 'ls'
                 ansiColor('xterm') {
                     ansiblePlaybook(
                         playbook: '${PWD}/carpools/deployment/site.yaml',
