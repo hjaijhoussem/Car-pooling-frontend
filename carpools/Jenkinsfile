@@ -3,7 +3,7 @@ pipeline {
     tools {
         maven '3.9.5'
         nodejs 'nodejs-18'
-        // ansible 'ansible-home'
+        ansible 'ansible-home'
     }
     environment {
         NEXUS_CREDENTIAL_ID = "nexus"
@@ -97,21 +97,12 @@ pipeline {
             }
             steps {
                 input message: 'Proceed with deployment?'
-                  // parameters: [
-                  //     choice(
-                  //         name: 'Proceed with deployment?',
-                  //         choices: ['Yes', 'No'],
-                  //         description: 'Do you want to deploy the new image?'
-                  //     )
-                  // ]
-                //sh 'docker compose -f ./carpools/docker-compose.yaml up -d''
-                sh 'mkdir -p ~/.ssh'
-                sh 'echo "${SSH_KEY}" > ~/.ssh/id_rsa'
-                sh 'chmod 600 ~/.ssh/id_rsa'
+                //sh 'docker compose -f ./carpools/docker-compose.yaml up -d'
+                //sh 'mkdir -p ~/.ssh'
+                //sh 'echo "${SSH_KEY}" > ~/.ssh/id_rsa'
+                //sh 'chmod 600 ~/.ssh/id_rsa'
                 sh 'cp -r ${PWD}/* /ansible/'
-                sh 'ansible-playbook -i /ansible/carpools/deployment/inventory.ini /ansible/carpools/deployment/site.yaml -e image_name=${FRONTEND_IMAGE} -e network_name={NETWORK_NAME}'
-                // sh 'echo pwd = ${PWD}'
-                // sh 'ls'
+                //sh 'ansible-playbook -i /ansible/carpools/deployment/inventory.ini /ansible/carpools/deployment/site.yaml -e image_name=${FRONTEND_IMAGE} -e network_name={NETWORK_NAME}'
                 // ansiColor('xterm') {
                 //     ansiblePlaybook(
                 //         playbook: '/ansible/carpools/deployment/site.yaml',
