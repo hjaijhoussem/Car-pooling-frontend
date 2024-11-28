@@ -112,6 +112,7 @@ pipeline {
                         playbook: '/ansible/carpools/deployment/site.yaml',
                         inventory: '/ansible/carpools/deployment/inventory.ini',
                         credentialsId: 'ansible-ssh-key',
+                        extraVars: [image_name: '${FRONTEND_IMAGE}'],
                         colorized: true)
                 }
             }
