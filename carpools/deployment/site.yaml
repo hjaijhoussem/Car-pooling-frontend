@@ -6,6 +6,11 @@
     image_name: "{{ image_name }}"  # This variable will be overridden in the Jenkins pipeline
 
   tasks:
+    - name: Check if the Docker network exists
+      docker_network:
+        name: "{{ network_name }}"
+        state: present
+        
     - name: Stop and remove the existing container if it exists
       docker_container:
         name: car-pooling-fe
@@ -22,5 +27,7 @@
         name: car-pooling-fe
         image: "{{ image_name }}"
         state: started
+        networks:
+          - name: "{{ network_name }}"
         published_ports:
           - "3000:80"
