@@ -3,6 +3,7 @@ pipeline {
     tools {
         maven '3.9.5'
         nodejs 'nodejs-18'
+        ansible 'ansible-home'
     }
     environment {
         NEXUS_CREDENTIAL_ID = "nexus"
@@ -82,12 +83,12 @@ pipeline {
             }
         }
         stage('Deploy') {
-             agent {
-                 docker {
-                     image 'litmuschaos/ansible-runner'
-                     args '-v $PWD:/ansible'
-                 }
-             }
+             // agent {
+             //     docker {
+             //         image 'litmuschaos/ansible-runner'
+             //         args '-v $PWD:/ansible'
+             //     }
+             // }
             environment {
                 FRONTEND_IMAGE = "${DOCKER_IMAGE_NAME}"
                 SSH_KEY = credentials('ansible-ssh-key')
@@ -105,12 +106,12 @@ pipeline {
                 // sh 'mkdir -p ~/.ssh'
                 // sh 'echo "${SSH_KEY}" > ~/.ssh/id_rsa'
                 // sh 'chmod 600 ~/.ssh/id_rsa'
-                sh 'cp -r /var/jenkins_home/workspace/car-pooling-fe@2/* /ansible/'
+                // sh 'cp -r /var/jenkins_home/workspace/car-pooling-fe@2/* /ansible/'
                 // sh 'ansible-playbook /ansible/carpools/deployment/site.yaml -e image_name=car-pooling-fe:4'
                 ansiColor('xterm') {
                     ansiblePlaybook(
-                        playbook: '/ansible/carpools/deployment/site.yaml',
-                        inventory: '/ansible/carpools/deployment/inventory.ini',
+                        playbook: './carpools/deployment/site.yaml',
+                        inventory: './carpools/deployment/inventory.ini',
                         credentialsId: 'ansible-ssh-key',
                         extraVars: [image_name: '${FRONTEND_IMAGE}'],
                         colorized: true)
