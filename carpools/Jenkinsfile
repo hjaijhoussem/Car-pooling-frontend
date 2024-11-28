@@ -102,12 +102,18 @@ pipeline {
                       )
                   ]
                 //sh 'docker compose -f ./carpools/docker-compose.yaml up -d''
-                sh 'mkdir -p ~/.ssh'
-                sh 'echo "${SSH_KEY}" > ~/.ssh/id_rsa'
-                sh 'chmod 600 ~/.ssh/id_rsa'
+                // sh 'mkdir -p ~/.ssh'
+                // sh 'echo "${SSH_KEY}" > ~/.ssh/id_rsa'
+                // sh 'chmod 600 ~/.ssh/id_rsa'
                 sh 'cp -r /var/jenkins_home/workspace/car-pooling-fe@2/* /ansible/'
-                sh 'ansible-playbook /ansible/carpools/deployment/site.yaml -e image_name=car-pooling-fe:4'
-
+                // sh 'ansible-playbook /ansible/carpools/deployment/site.yaml -e image_name=car-pooling-fe:4'
+                ansiColor('xterm') {
+                    ansiblePlaybook(
+                        playbook: '/ansible/carpools/deployment/site.yaml',
+                        inventory: '/ansible/carpools/deployment/inventory.ini',
+                        credentialsId: 'ansible-ssh-key',
+                        colorized: true)
+                }
             }
         }
     }
