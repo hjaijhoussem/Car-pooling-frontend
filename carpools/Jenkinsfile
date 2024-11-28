@@ -112,8 +112,8 @@ pipeline {
                 sh 'ls'
                 ansiColor('xterm') {
                     ansiblePlaybook(
-                        playbook: '/var/jenkins_home/workspace/car-pooling-fe/carpools/deployment/site.yaml',
-                        inventory: '/var/jenkins_home/workspace/car-pooling-fe/carpools/deployment/inventory.ini',
+                        playbook: '/car-pooling-fe/carpools/deployment/site.yaml',
+                        inventory: '/carpools/deployment/inventory.ini',
                         credentialsId: 'ansible-ssh-key',
                         extraVars: [image_name: '${FRONTEND_IMAGE}'],
                         colorized: true)
