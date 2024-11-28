@@ -100,10 +100,8 @@ pipeline {
                           description: 'Do you want to deploy the new image?'
                       )
                   ]
-                //sh 'docker compose -f ./carpools/docker-compose.yaml up -d'
-                sh 'echo local path: ${PWD}'
+                //sh 'docker compose -f ./carpools/docker-compose.yaml up -d''
                 sh 'cp -r /var/jenkins_home/workspace/car-pooling-fe@2/* /ansible/'
-                sh 'ls /ansible'
                 sh 'ansible-playbook /ansible/carpools/deployment/site.yaml -e image_name=car-pooling-fe:4'
 
             }
