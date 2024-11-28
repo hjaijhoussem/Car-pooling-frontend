@@ -102,8 +102,8 @@ pipeline {
                       )
                   ]
                 //sh 'docker compose -f ./carpools/docker-compose.yaml up -d''
-                echo "${SSH_KEY}" > /root/.ssh/id_rsa
-                chmod 600 /root/.ssh/id_rsa
+                sh 'echo "${SSH_KEY}" > /root/.ssh/id_rsa'
+                sh 'chmod 600 /root/.ssh/id_rsa'
                 sh 'cp -r /var/jenkins_home/workspace/car-pooling-fe@2/* /ansible/'
                 sh 'ansible-playbook /ansible/carpools/deployment/site.yaml -e image_name=car-pooling-fe:4'
 
