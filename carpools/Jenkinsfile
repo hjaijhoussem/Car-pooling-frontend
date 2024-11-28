@@ -109,6 +109,7 @@ pipeline {
                 // sh 'cp -r /var/jenkins_home/workspace/car-pooling-fe@2/* /ansible/'
                 // sh 'ansible-playbook /ansible/carpools/deployment/site.yaml -e image_name=car-pooling-fe:4'
                 sh 'echo pwd = ${PWD}'
+                sh 'ls'
                 ansiColor('xterm') {
                     ansiblePlaybook(
                         playbook: './carpools/deployment/site.yaml',
