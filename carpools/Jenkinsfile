@@ -101,6 +101,7 @@ pipeline {
                 //sh 'mkdir -p ~/.ssh'
                 //sh 'echo "${SSH_KEY}" > ~/.ssh/id_rsa'
                 //sh 'chmod 600 ~/.ssh/id_rsa'
+                sh 'mkdir ansible'
                 sh 'cp -r ${PWD}/* /ansible/'
                 // sh 'ansible-playbook -i /ansible/carpools/deployment/inventory.ini /ansible/carpools/deployment/site.yaml -e image_name=${FRONTEND_IMAGE} -e network_name={NETWORK_NAME}'
                 ansiColor('xterm') {
