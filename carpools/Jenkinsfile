@@ -97,13 +97,13 @@ pipeline {
             }
             steps {
                 input message: 'Approve Deployment',
-                  parameters: [
-                      choice(
-                          name: 'Proceed with deployment?',
-                          choices: ['Yes', 'No'],
-                          description: 'Do you want to deploy the new image?'
-                      )
-                  ]
+                  // parameters: [
+                  //     choice(
+                  //         name: 'Proceed with deployment?',
+                  //         choices: ['Yes', 'No'],
+                  //         description: 'Do you want to deploy the new image?'
+                  //     )
+                  // ]
                 //sh 'docker compose -f ./carpools/docker-compose.yaml up -d''
                 sh 'mkdir -p ~/.ssh'
                 sh 'echo "${SSH_KEY}" > ~/.ssh/id_rsa'
